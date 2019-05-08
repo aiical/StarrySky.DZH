@@ -115,6 +115,7 @@
     <Compile Include="Common\IPAddressHelper.cs" />
     <Compile Include="Common\Mail.cs" />
     <Compile Include="Common\ObjectHelper.cs" />
+    <Compile Include="Common\RandomStringHelper.cs" />
     <Compile Include="DataConvert\ConvertHelperExtend.cs" />
     <Compile Include="DataConvert\PinYinConvertHelper.cs" />
     <Compile Include="EnumUtil\EnumHelper.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="QRCode\QRCodeHelper.cs" />
     <Compile Include="Redis\RedisHelper.cs" />
     <Compile Include="Redis\RedisInstance.cs" />
+    <Compile Include="StreamHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />

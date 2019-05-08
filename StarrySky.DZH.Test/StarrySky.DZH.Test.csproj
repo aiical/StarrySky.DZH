@@ -64,6 +64,10 @@
       <Project>{06995876-44f1-45be-b94b-4b4c07395d49}</Project>
       <Name>StarrySky.DZH.ORMTool</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StarrySky.DZH.RabbitMQ\StarrySky.DZH.RabbitMQ.csproj">
+      <Project>{41D1936B-4FFC-4095-A996-385B46F3FA10}</Project>
+      <Name>StarrySky.DZH.RabbitMQ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StarrySky.DZH.Util\StarrySky.DZH.Util.csproj">
       <Project>{02491bee-5c11-43d7-9728-3d71a2e1ed94}</Project>
       <Name>StarrySky.DZH.Util</Name>
