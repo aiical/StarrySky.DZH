@@ -13,8 +13,9 @@ namespace StarrySky.DZH.Test
         {
             //RedisHelper.Set<string>("ding", 20, "你试试");
             //var ss= RedisHelper.Get<string>("ding");
-
+           // HelloWord.HelloWordServer();
             HelloWord.HelloWordClient();
+            HelloWord.HelloWordServer();
         }
     }
 }
