@@ -116,6 +116,7 @@
     <Compile Include="Common\Mail.cs" />
     <Compile Include="Common\ObjectHelper.cs" />
     <Compile Include="Common\RandomStringHelper.cs" />
+    <Compile Include="CustomAttribute\RangeAttribute.cs" />
     <Compile Include="DataConvert\ConvertHelperExtend.cs" />
     <Compile Include="DataConvert\PinYinConvertHelper.cs" />
     <Compile Include="EnumUtil\EnumHelper.cs" />
