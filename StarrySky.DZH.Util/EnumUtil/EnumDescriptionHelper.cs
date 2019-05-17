@@ -12,42 +12,39 @@ namespace StarrySky.DZH.Util.EnumUtil
     /// </summary>
     public class EnumDescriptionHelper
     {
-            public static Dictionary<int, string> ProjectDic = new Dictionary<int, string>();
+        public static Dictionary<int, string> ProjectDic = new Dictionary<int, string>();
 
-            private static readonly object Locker = new object();
+        private static readonly object Locker = new object();
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="projectCode"></param>
-            /// <returns></returns>
-            public static string GetProjectDescription(int projectCode)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectCode"></param>
+        /// <returns></returns>
+        public static string GetProjectDescription(int projectCode)
+        {
+            string desc = "";
+            if (ProjectDic == null || !ProjectDic.Any())
             {
-                string desc = "";
-                if (ProjectDic == null || !ProjectDic.Any())
+                lock (Locker)
                 {
-                    lock (Locker)
+                    if (ProjectDic == null || !ProjectDic.Any())
                     {
-                        if (ProjectDic == null || !ProjectDic.Any())
+                        Dictionary<Int32, String> enumDic = new Dictionary<int, string>();
+                        foreach (ProjectEnum enumValue in Enum.GetValues(typeof(ProjectEnum)))
                         {
-                            Dictionary<Int32, String> enumDic = new Dictionary<int, string>();
-                            foreach (ProjectEnum enumValue in Enum.GetValues(typeof(ProjectEnum)))
-                            {
-                                int key = enumValue.GetHashCode();
+                            int key = enumValue.GetHashCode();
                             string description = enumValue.GetEnumDescription();
-                                enumDic.Add(key, description);
-                            }
-                            ProjectDic = enumDic;
+                            enumDic.Add(key, description);
                         }
+                        ProjectDic = enumDic;
                     }
                 }
-                ProjectDic.TryGetValue(projectCode, out desc);
-                return desc ?? "";
             }
-
-
+            ProjectDic.TryGetValue(projectCode, out desc);
+            return desc ?? "";
+        }
     }
-
     public enum ProjectEnum
     {
         /// <summary>
@@ -66,3 +63,5 @@ namespace StarrySky.DZH.Util.EnumUtil
         [Description("我是C")]
         C = 10103,
     }
+}
+   
