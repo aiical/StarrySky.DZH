@@ -15,7 +15,6 @@ namespace StarrySky.DZH.Util.Tests
         public void CreateJsonTest()
         {
             ChinaAreaCrawer.CreateJson();
-            Assert.Fail();
         }
     }
 }
