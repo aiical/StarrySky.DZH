@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 using StarrySky.DZH.Util.DataConvert;
+using StarrySky.DZH.Util.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

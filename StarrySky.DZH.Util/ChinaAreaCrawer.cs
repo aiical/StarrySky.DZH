@@ -1,5 +1,5 @@
 ﻿using HtmlAgilityPack;
-using StarrySky.DZH.Util.DataConvert;
+using StarrySky.DZH.Util.Extensions;
 using StarrySky.DZH.Util.HttpUtil;
 using System;
 using System.Collections.Generic;

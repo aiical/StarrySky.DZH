@@ -3,6 +3,7 @@ using Dapper.Contrib.Extensions;
 using MySql.Data.MySqlClient;
 using StarrySky.DZH.Util.Common;
 using StarrySky.DZH.Util.DataConvert;
+using StarrySky.DZH.Util.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

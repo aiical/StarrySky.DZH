@@ -9,7 +9,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Formatting = Newtonsoft.Json.Formatting;
 
-namespace StarrySky.DZH.Util.DataConvert
+namespace StarrySky.DZH.Util.Extensions
 {
     /// <summary>
     /// 快捷类型转换

@@ -111,7 +111,6 @@
     <Compile Include="ChinaAreaCrawer.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Common\DLLConfigHelper.cs" />
-    <Compile Include="Common\DateTimeHelper.cs" />
     <Compile Include="Common\DeepCloneHelper.cs" />
     <Compile Include="Common\IPAddressHelper.cs" />
     <Compile Include="Common\Mail.cs" />
@@ -119,10 +118,11 @@
     <Compile Include="Common\RandomStringHelper.cs" />
     <Compile Include="CustomAttribute\RangeAttribute.cs" />
     <Compile Include="CustomAttribute\Validate\AttributeValidateHelper.cs" />
-    <Compile Include="DataConvert\ConvertHelperExtend.cs" />
+    <Compile Include="Extensions\ConvertHelperExtend.cs" />
     <Compile Include="DataConvert\PinYinConvertHelper.cs" />
     <Compile Include="EnumUtil\EnumDescriptionHelper.cs" />
     <Compile Include="EnumUtil\EnumHelper.cs" />
+    <Compile Include="Extensions\DateTimeExtend.cs" />
     <Compile Include="Html\HtmlAgilityPackHelper.cs" />
     <Compile Include="HttpUtil\CookieHelper.cs" />
     <Compile Include="HttpUtil\CrawlerHttpUtil.cs" />
@@ -139,9 +139,7 @@
     <Compile Include="Redis\RedisInstance.cs" />
     <Compile Include="StreamHelper.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
