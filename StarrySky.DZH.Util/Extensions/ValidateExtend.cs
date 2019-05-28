@@ -6,10 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace StarrySky.DZH.Util.Common
+namespace StarrySky.DZH.Util.Extensions
 {
     /// <summary>
-    /// 常用的验证和转换方法，包括字符串是否为空，是否是数字等等
+    /// 验证扩展类
     /// </summary>
     public static class ValidateExtend
     {
@@ -281,6 +281,10 @@ namespace StarrySky.DZH.Util.Common
         {
             return string.IsNullOrEmpty(s);
         }
+        public static bool IsNullOrWhiteSpace(this string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
         /// <summary>
         /// 验证StringBuilder是否为空
         /// </summary>
@@ -288,7 +292,7 @@ namespace StarrySky.DZH.Util.Common
         /// <returns>true:空 false:非空</returns>
         public static bool IsNullOrEmpty(this StringBuilder str)
         {
-            return ((StringBuilder)str).Length < 1;
+            return str == null ? false : str.Length < 1;
         }
         /// <summary>
         /// 验证DataRow是否为空
@@ -313,6 +317,5 @@ namespace StarrySky.DZH.Util.Common
         }
 
         #endregion
-
     }
 }

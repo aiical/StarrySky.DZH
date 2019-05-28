@@ -43,7 +43,7 @@
             this.chkService = new System.Windows.Forms.CheckBox();
             this.chkWeb = new System.Windows.Forms.CheckBox();
             this.chklboxTable = new System.Windows.Forms.CheckedListBox();
-            this.btnGenerate = new System.Windows.Forms.Button();
+            this.btnBuilder = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnSetPath = new System.Windows.Forms.Button();
@@ -101,20 +101,20 @@
             this.mySQLToolStripMenuItem,
             this.sQLServerToolStripMenuItem});
             this.连接ToolStripMenuItem.Name = "连接ToolStripMenuItem";
-            this.连接ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.连接ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.连接ToolStripMenuItem.Text = "新建连接";
             // 
             // mySQLToolStripMenuItem
             // 
             this.mySQLToolStripMenuItem.Name = "mySQLToolStripMenuItem";
-            this.mySQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mySQLToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.mySQLToolStripMenuItem.Text = "MySQL";
             this.mySQLToolStripMenuItem.Click += new System.EventHandler(this.mySQLToolStripMenuItem_Click);
             // 
             // sQLServerToolStripMenuItem
             // 
             this.sQLServerToolStripMenuItem.Name = "sQLServerToolStripMenuItem";
-            this.sQLServerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sQLServerToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.sQLServerToolStripMenuItem.Text = "SQL Server";
             // 
             // cboxVersion
@@ -196,15 +196,15 @@
             this.chklboxTable.TabIndex = 57;
             this.chklboxTable.SelectedIndexChanged += new System.EventHandler(this.chklboxTable_SelectedIndexChanged);
             // 
-            // btnGenerate
+            // btnBuilder
             // 
-            this.btnGenerate.Location = new System.Drawing.Point(319, 612);
-            this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(273, 37);
-            this.btnGenerate.TabIndex = 56;
-            this.btnGenerate.Text = "生成";
-            this.btnGenerate.UseVisualStyleBackColor = true;
-            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            this.btnBuilder.Location = new System.Drawing.Point(319, 612);
+            this.btnBuilder.Name = "btnBuilder";
+            this.btnBuilder.Size = new System.Drawing.Size(273, 37);
+            this.btnBuilder.TabIndex = 56;
+            this.btnBuilder.Text = "生成";
+            this.btnBuilder.UseVisualStyleBackColor = true;
+            this.btnBuilder.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // label2
             // 
@@ -315,7 +315,7 @@
             this.Controls.Add(this.chkService);
             this.Controls.Add(this.chkWeb);
             this.Controls.Add(this.chklboxTable);
-            this.Controls.Add(this.btnGenerate);
+            this.Controls.Add(this.btnBuilder);
             this.Controls.Add(this.cboxVersion);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label5);
@@ -352,7 +352,7 @@
         private System.Windows.Forms.CheckBox chkService;
         private System.Windows.Forms.CheckBox chkWeb;
         private System.Windows.Forms.CheckedListBox chklboxTable;
-        private System.Windows.Forms.Button btnGenerate;
+        private System.Windows.Forms.Button btnBuilder;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Button btnSetPath;

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateToolApp", "Generate
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarrySky.DZH.RabbitMQ", "StarrySky.DZH.RabbitMQ\StarrySky.DZH.RabbitMQ.csproj", "{41D1936B-4FFC-4095-A996-385B46F3FA10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DZHCodeBuilder", "DZHCodeBuilder\DZHCodeBuilder.csproj", "{A78CCE58-78B2-4949-B31A-3CB956EFE8B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{41D1936B-4FFC-4095-A996-385B46F3FA10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41D1936B-4FFC-4095-A996-385B46F3FA10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41D1936B-4FFC-4095-A996-385B46F3FA10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A78CCE58-78B2-4949-B31A-3CB956EFE8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A78CCE58-78B2-4949-B31A-3CB956EFE8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A78CCE58-78B2-4949-B31A-3CB956EFE8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A78CCE58-78B2-4949-B31A-3CB956EFE8B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

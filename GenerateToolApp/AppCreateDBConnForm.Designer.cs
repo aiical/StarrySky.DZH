@@ -50,6 +50,7 @@
             this.label1.Size = new System.Drawing.Size(77, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "数据库名称：";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtDBName
             // 
@@ -58,6 +59,7 @@
             this.txtDBName.Size = new System.Drawing.Size(236, 21);
             this.txtDBName.TabIndex = 1;
             this.txtDBName.Text = "TCSURPRISEGAMELOG";
+            this.txtDBName.TextChanged += new System.EventHandler(this.txtDBName_TextChanged);
             // 
             // label2
             // 
@@ -67,6 +69,7 @@
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 2;
             this.label2.Text = "主机：";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
@@ -76,6 +79,7 @@
             this.label3.Size = new System.Drawing.Size(41, 12);
             this.label3.TabIndex = 3;
             this.label3.Text = "端口：";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
             // 
@@ -85,6 +89,7 @@
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 4;
             this.label4.Text = "用户名：";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // label5
             // 
@@ -94,6 +99,7 @@
             this.label5.Size = new System.Drawing.Size(41, 12);
             this.label5.TabIndex = 5;
             this.label5.Text = "密码：";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // btnTest
             // 
@@ -122,6 +128,7 @@
             this.txtDBUserName.Size = new System.Drawing.Size(236, 21);
             this.txtDBUserName.TabIndex = 7;
             this.txtDBUserName.Text = "TCSURPRISEGAMELOG_TEST";
+            this.txtDBUserName.TextChanged += new System.EventHandler(this.txtDBUserName_TextChanged);
             // 
             // txtDBIP
             // 
@@ -130,6 +137,7 @@
             this.txtDBIP.Size = new System.Drawing.Size(236, 21);
             this.txtDBIP.TabIndex = 7;
             this.txtDBIP.Text = "10.100.41.4";
+            this.txtDBIP.TextChanged += new System.EventHandler(this.txtDBIP_TextChanged);
             // 
             // txtDBPassword
             // 
@@ -138,6 +146,7 @@
             this.txtDBPassword.Size = new System.Drawing.Size(236, 21);
             this.txtDBPassword.TabIndex = 7;
             this.txtDBPassword.Text = "uGT3lRPC9SR0ABc3Y2a8qrE";
+            this.txtDBPassword.TextChanged += new System.EventHandler(this.txtDBPassword_TextChanged);
             // 
             // txtDBPort
             // 
@@ -146,6 +155,7 @@
             this.txtDBPort.Size = new System.Drawing.Size(77, 21);
             this.txtDBPort.TabIndex = 7;
             this.txtDBPort.Text = "3818";
+            this.txtDBPort.TextChanged += new System.EventHandler(this.txtDBPort_TextChanged);
             // 
             // AppCreateDBConnForm
             // 

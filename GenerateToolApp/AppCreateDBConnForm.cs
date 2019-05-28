@@ -69,5 +69,55 @@ namespace GenerateToolApp
             MessageBox.Show("添加成功！");
             this.Close();
         }
+
+        private void txtDBName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDBUserName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDBIP_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDBPassword_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDBPort_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace GenerateToolApp.Common
+namespace DZHCodeBuilder.Common
 {
     /// <summary>
-    /// neget 拉取Microsoft.Build
     /// 解决方案的文件处理 using Microsoft.Build.Evaluation;
     /// </summary>
     public class CsprojHelper
