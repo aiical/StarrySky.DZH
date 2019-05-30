@@ -1,22 +1,31 @@
 ﻿using Dapper;
-using StarrySky.DZH.ORMTool.ORMFramework;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using StarrySky.DZH.ORMTool.SQLORM.Common;
+using MySql.Data.MySqlClient;
 
 namespace StarrySky.DZH.ORMTool
 {
     /// <summary>
+    /// author:dingzhenhua
     /// conn不带事务时，会自行处理open,用到事务需手动开启
     /// </summary>
     public class DapperHelper
     {
         private static IDbConnection GetDbConnection(string dbName)
         {
-            return new SqlConnection(DBConfig.GetDbDataSource(dbName));
+            try
+            {
+                //new SqlConnection(DBConfig.GetDbDataSource(dbName)) //SqlConnection不支持MySQL
+                return new MySqlConnection(DBConfig.GetDBConnStr(dbName));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -126,7 +135,13 @@ namespace StarrySky.DZH.ORMTool
 
         }
 
-
+        /// <summary>
+        /// do not use it to insert if you need return id form the database
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="sql"></param>
+        /// <param name="Params"></param>
+        /// <returns></returns>
         public static int Execute(string dbName, string sql, object Params = null)
         {
             if (string.IsNullOrWhiteSpace(sql))
@@ -139,8 +154,28 @@ namespace StarrySky.DZH.ORMTool
                 return list;
             }
         }
+        /// <summary>
+        /// use it to insert if you need return id form the database
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <param name="sql"></param>
+        /// <param name="Params"></param>
+        /// <returns></returns>
+        public static int InsertReturnId(string dbName, string sql, object Params)
+        {
+            if (string.IsNullOrWhiteSpace(sql))
+            {
+                return 0;
+            }
+            using (var conn = GetDbConnection(dbName))
+            {
+                var list = conn.Execute(sql, Params, null);
+                var r = conn.Query("Select LAST_INSERT_ID() id", null);
+                return r.FirstOrDefault()?.id ?? 0;
+            }
+        }
     }
 
-    
+
 
 }

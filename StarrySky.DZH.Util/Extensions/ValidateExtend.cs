@@ -306,16 +306,16 @@ namespace StarrySky.DZH.Util.Extensions
         }
 
         /// <summary>
-        /// 判断一个List是否为空或者未初始化
+        /// 判断一个集合是否为空或者未初始化
         /// </summary>
         /// <typeparam name="T">任意Model</typeparam>
         /// <param name="list">任意实现Ilist接口的类型</param>
         /// <returns>返回true表示空，否则不为空</returns>
-        public static bool ListIsNullOrEmpty<T>(this IEnumerable<T> list)
+        public static bool IsNullOrEmptyCollection<T>(this IEnumerable<T> list)
         {
             return list == null || !list.Any();
         }
-
+        
         #endregion
     }
 }

@@ -83,14 +83,14 @@
     <Compile Include="DapperHelper.cs" />
     <Compile Include="MongoDB\Entity\BaseMongoEntity.cs" />
     <Compile Include="MongoDB\MongoDBRepository.cs" />
-    <Compile Include="ORMFramework\DBConfig.cs" />
-    <Compile Include="ORMFramework\ORMEnum.cs" />
-    <Compile Include="ORMFramework\CommonORM.cs" />
-    <Compile Include="ORMFramework\ORMAttributes.cs" />
-    <Compile Include="ORMFramework\ORMModel.cs" />
-    <Compile Include="ORMFramework\TranslatorForMYSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLHelper.cs" />
+    <Compile Include="SQLORM\Common\DBConfig.cs" />
+    <Compile Include="SQLORM\Common\DBTypeEnum.cs" />
+    <Compile Include="SQLORM\CustomAttribute\ORMAttributes.cs" />
+    <Compile Include="SQLORM\Entity\PersonEntity.cs" />
+    <Compile Include="SQLORM\SqlBuilder.cs" />
+    <Compile Include="SQLORM\SqlORM.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
