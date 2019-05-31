@@ -11,17 +11,30 @@ namespace StarrySky.DZH.ORMTool.SQLORM
 {
     public class SqlBuilder
     {
+        public static void TestReflect<T>(T obj)
+        {
+            //GetType()方法继承自Object，所以C#中任何对象都具有GetType()方法，x.GetType()，其中x为变量名
+            //typeof(x)中的x，必须是具体的类名、类型名称等，不可以是变量名称           
+            var type1 = obj.GetType();//{Name = "DemoEntity" FullName = "StarrySky.DZH.ORMTool.SQLORM.Entity.DemoEntity"}
+            var type2 = obj.GetType().GetTypeInfo();//{Name = "DemoEntity" FullName = "StarrySky.DZH.ORMTool.SQLORM.Entity.DemoEntity"}
+            Type type = typeof(T);//{Name = "DemoEntity" FullName = "StarrySky.DZH.ORMTool.SQLORM.Entity.DemoEntity"}
+            var ss = type.Name;
+            var type3 = type.GetType();//{Name = "RuntimeType" FullName = "System.RuntimeType"}
+            var type4 = type.GetTypeInfo();//{Name = "DemoEntity" FullName = "StarrySky.DZH.ORMTool.SQLORM.Entity.DemoEntity"}
+            var properties = type.GetProperties();//获取属性
+            var s1 = properties.First().PropertyType;//{Name = "Int64" FullName = "System.Int64"}
+            var s2 = properties.First().PropertyType.Name;
+            var s3 = properties.First().GetType();//{Name = "RuntimePropertyInfo" FullName = "System.Reflection.RuntimePropertyInfo"}
+            var members = type.GetMembers();
+            var fields = type.GetFields();//获取公共字段（非属性），包含静态和非静态
+        }
+
         public static string ToInsertSql<T>(T obj, out PropertyInfo prop)
         {
             prop = null;
             StringBuilder sbInsertSql = new StringBuilder();
-            //GetType()方法继承自Object，所以C#中任何对象都具有GetType()方法，x.GetType()，其中x为变量名
-            //typeof(x)中的x，必须是具体的类名、类型名称等，不可以是变量名称
             Type type = typeof(T);
-            //var type1 = obj.GetType();
-            var properties = type.GetProperties();//获取属性
-            //var members = type.GetMembers();
-            //var fields = type.GetFields();//获取公共字段（非属性），包含静态和非静态
+            var properties = type.GetProperties();//获取属性         
             if (properties.IsNullOrEmptyCollection())
             {
                 return "";
@@ -57,13 +70,8 @@ namespace StarrySky.DZH.ORMTool.SQLORM
         {
             prop = null;
             StringBuilder sbSql = new StringBuilder();
-            //GetType()方法继承自Object，所以C#中任何对象都具有GetType()方法，x.GetType()，其中x为变量名
-            //typeof(x)中的x，必须是具体的类名、类型名称等，不可以是变量名称
             Type type = typeof(T);
-            //var type1 = obj.GetType();
             var properties = type.GetProperties();//获取属性
-            //var members = type.GetMembers();
-            //var fields = type.GetFields();//获取公共字段（非属性），包含静态和非静态
             if (properties.IsNullOrEmptyCollection())
             {
                 return "";
@@ -76,8 +84,13 @@ namespace StarrySky.DZH.ORMTool.SQLORM
                 if (!PrimaryKey.IsNullOrEmptyCollection())
                 {
                     prop = p;
+                    continue;
                 }
-                if (PrimaryKey.IsNullOrEmptyCollection() && Ignore.IsNullOrEmptyCollection())
+                if (!Ignore.IsNullOrEmptyCollection())
+                {
+                    continue;
+                }
+                if (GetChangeStagel(obj, p))
                 {
                     setcolumn.Add($"{p.Name}=@{p.Name}");
                 }
@@ -87,6 +100,19 @@ namespace StarrySky.DZH.ORMTool.SQLORM
             sbSql.AppendFormat($"UPDATE {tableInfo.TableName} SET {string.Join(",", setcolumn)} where {prop.Name}=@{prop.Name}");
 
             return sbSql.ToString();
+        }
+
+
+        public static bool GetChangeStagel<T>(T obj, PropertyInfo p)
+        {
+            var type = p.GetValue(obj);
+            if (type is string v && v == default(string))
+            {
+                return false;
+            }
+
+
+            return true;
         }
     }
 }

@@ -13,6 +13,20 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
     public class SqlBuilderTests
     {
         [TestMethod()]
+        public void ToReflectTest()
+        {
+            var model = new DemoEntity()
+            {
+                DId = 34,
+                DName = "zolo",
+                DSex = 18,
+                DAddress = "3"
+            };
+             SqlBuilder.TestReflect(model);
+        }
+
+
+        [TestMethod()]
         public void ToInsertSqlTest()
         {
             var model = new DemoEntity()
