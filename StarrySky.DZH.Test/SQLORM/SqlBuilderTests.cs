@@ -36,7 +36,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
                 DSex = 18,
                 DAddress="3"
             };
-            //new SqlORM().AddEntityShowId(model);
+            //SqlORM<DemoEntity>.AddEntityShowId(model);
         }
 
         [TestMethod()]
@@ -49,7 +49,9 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
                 DSex = 222,
                 DAddress = "3"
             };
-            new SqlORM().UpdateEntityById(model);
+             //SqlORM<DemoEntity>.UpdateEntityById(model);
+
+             SqlORM<DemoEntity>.UpdateCustom(p=>p.DId ==1).;
         }
     }
 }

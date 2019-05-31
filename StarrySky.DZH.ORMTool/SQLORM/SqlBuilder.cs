@@ -105,13 +105,19 @@ namespace StarrySky.DZH.ORMTool.SQLORM
 
         public static bool GetChangeStagel<T>(T obj, PropertyInfo p)
         {
-            var type = p.GetValue(obj);
-            if (type is string v && v == default(string))
+            var value = p.GetValue(obj);
+            if (p.PropertyType==typeof(string) && (string)value == default(string))
             {
                 return false;
             }
-
-
+            if (p.PropertyType == typeof(DateTime) && (DateTime)value == default(DateTime))
+            {
+                return false;
+            }
+            if (p.PropertyType == typeof(int) && (int)value == default(int))
+            {
+                //return false;
+            }
             return true;
         }
     }
