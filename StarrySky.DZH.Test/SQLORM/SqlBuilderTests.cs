@@ -51,7 +51,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
             };
              //SqlORM<DemoEntity>.UpdateEntityById(model);
 
-             SqlORM<DemoEntity>.UpdateCustom(p=>p.DId ==1).;
+             //SqlORM<DemoEntity>.UpdateCustom(p=>p.DId ==1).;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
 {
     public class SqlORM<T> where T : class
     {
+        #region insert
         /// <summary>
         /// 新增一个实体并返回主键
         /// </summary>
@@ -35,7 +36,10 @@ namespace StarrySky.DZH.ORMTool.SQLORM
             return id > 0;
         }
 
-        public static  bool UpdateEntityById(T model)
+        #endregion
+
+        #region update
+        public static bool UpdateEntityById(T model)
         {
             PropertyInfo primaryProp;
             var sql = SqlBuilder.ToUpdateSql(model, out primaryProp);
@@ -44,18 +48,35 @@ namespace StarrySky.DZH.ORMTool.SQLORM
         }
 
         #region lambda 链式更新
-        public static SqlORM<T> UpdateCustom(Expression<Func<T, bool>> exp)
-        {
-            var Body = exp.Body;
-            var Name = exp.Name;
-            var NodeType = exp.NodeType;
-            var Parameters = exp.Parameters;
-            var ReturnType = exp.ReturnType;
-            var type = exp.Type;
+        //public static SqlORM<T> UpdateCustom(Expression<Func<T, bool>> exp)
+        //{
+        //    var Body = exp.Body;
+        //    var Name = exp.Name;
+        //    var NodeType = exp.NodeType;
+        //    var Parameters = exp.Parameters;
+        //    var ReturnType = exp.ReturnType;
+        //    var type = exp.Type;
 
-            //return ;
+        //    //return ;
+        //}
+        #endregion
+
+        //按条件部分更新
+        public virtual int Update(Expression<Func<T>> update, Expression<Func<T, bool>> where) 
+        {
+            return 0;
         }
         #endregion
 
+        #region select
+
+        #endregion
+
+        #region delete
+        #endregion
+
+        #region invid
+
+        #endregion
     }
 }
