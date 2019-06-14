@@ -12,6 +12,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
     [TestClass()]
     public class SqlBuilderTests
     {
+        SqlORM<DemoEntity> sqlORM = new SqlORM<DemoEntity>();
         [TestMethod()]
         public void ToReflectTest()
         {
@@ -22,7 +23,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
                 DSex = 18,
                 DAddress = "3"
             };
-             SqlBuilder.TestReflect(model);
+            SqlBuilder.TestReflect(model);
         }
 
 
@@ -34,9 +35,9 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
                 DId = 34,
                 DName = "zolo",
                 DSex = 18,
-                DAddress="3"
+                DAddress = "3"
             };
-            //SqlORM<DemoEntity>.AddEntityShowId(model);
+            sqlORM.AddEntityShowId(model);
         }
 
         [TestMethod()]
@@ -49,9 +50,30 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
                 DSex = 222,
                 DAddress = "3"
             };
-             //SqlORM<DemoEntity>.UpdateEntityById(model);
+            //sqlORM.UpdateEntityById(model);
 
-             //SqlORM<DemoEntity>.UpdateCustom(p=>p.DId ==1).;
+            //sqlORM.UpdateCustom(p=>p.DId ==1).;
+        }
+
+
+        [TestMethod()]
+        public void ToSelectTest()
+        {
+            var model = sqlORM.Select(t => t).Where(t => t.DId == 1).Excute();
+            var model2 = sqlORM.Select(t => new { t.DId, t.DName }).Where(t => t.DId == 1).Excute();
+
+        }
+
+        [TestMethod()]
+        public void DeleteByIdTest()
+        {
+            sqlORM.DeleteById(4);
+        }
+
+        [TestMethod()]
+        public void InvalidTest()
+        {
+            sqlORM.Invalid(p=>p.DId==3);
         }
     }
 }

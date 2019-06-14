@@ -90,7 +90,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
                 {
                     continue;
                 }
-                if (GetChangeStagel(obj, p))
+                if (GetChangeStage(obj, p))
                 {
                     setcolumn.Add($"{p.Name}=@{p.Name}");
                 }
@@ -102,11 +102,34 @@ namespace StarrySky.DZH.ORMTool.SQLORM
             return sbSql.ToString();
         }
 
+        public static string ToDeleteSql<T>(T obj, out PropertyInfo prop)
+        {
+            prop = null;
+            var type = typeof(T);
+            var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
+            var properties = type.GetProperties();//获取属性
+            if (properties.IsNullOrEmptyCollection())
+            {
+                return "";
+            }
+            string primaryKey = "";
+            foreach (var p in properties)
+            {
+                object[] PrimaryKey = p.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
 
-        public static bool GetChangeStagel<T>(T obj, PropertyInfo p)
+                if (!PrimaryKey.IsNullOrEmptyCollection())
+                {
+                    prop = p;
+                    primaryKey = p.Name;
+                }
+            }
+            return $"delete from {tableInfo.TableName} where {primaryKey}=@Key";
+        }
+
+        public static bool GetChangeStage<T>(T obj, PropertyInfo p)
         {
             var value = p.GetValue(obj);
-            if (p.PropertyType==typeof(string) && (string)value == default(string))
+            if (p.PropertyType == typeof(string) && (string)value == default(string))
             {
                 return false;
             }
@@ -120,5 +143,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
             }
             return true;
         }
+
+
     }
 }
