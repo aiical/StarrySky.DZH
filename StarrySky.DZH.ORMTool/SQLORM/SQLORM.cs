@@ -1,4 +1,5 @@
 ﻿using StarrySky.DZH.ORMTool.SQLORM.CustomAttribute;
+using StarrySky.DZH.ORMTool.SQLORM.ExpressionLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,15 @@ namespace StarrySky.DZH.ORMTool.SQLORM
 {
     public class SqlORM<T> where T : class
     {
+        private List<string> selectColumn = null;
+        private List<string> updateColumn = null;
+
+        public SqlORM()
+        {
+            selectColumn = new List<string>();
+            updateColumn = new List<string>();
+        }
+
         #region insert
         /// <summary>
         /// 新增一个实体并返回主键
@@ -50,12 +60,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
         #region lambda 链式更新
         public SqlORM<T> UpdateCustom<V>(Expression<Func<T, V>> exp)
         {
-            var Body = exp.Body;
-            var Name = exp.Name;
-            var NodeType = exp.NodeType;
-            var Parameters = exp.Parameters;
-            var ReturnType = exp.ReturnType;
-            var type = exp.Type;
+            updateColumn.AddRange(ExpressionTranslate.GetSelectColumn(exp));
 
             return this;
         }
@@ -72,11 +77,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
 
         public SqlORM<T> Select<V>(Expression<Func<T, V>> selectCol)
         {
-
-            return this;
-        }
-        public SqlORM<T> SelectIngore<V>(Expression<Func<T, V>> ingoreCol)
-        {
+            selectColumn.AddRange(ExpressionTranslate.GetSelectColumn(selectCol));
             return this;
         }
 
@@ -104,7 +105,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
             PropertyInfo primaryProp;
             var sql = SqlBuilder.ToDeleteSql(default(T), out primaryProp);
             //KeyValuePair<string, int> keyVal = new KeyValuePair<string, int>(primaryProp.Name, id);
-            var result = DapperHelper.Execute("dzhMySQL", sql, new { Key = id});
+            var result = DapperHelper.Execute("dzhMySQL", sql, new { Key = id });
             return result > 1;
         }
         #endregion
@@ -115,12 +116,12 @@ namespace StarrySky.DZH.ORMTool.SQLORM
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public bool Invalid(Expression<Func<T,bool>> predicate)
+        public bool Invalid(Expression<Func<T, bool>> predicate)
         {
             PropertyInfo primaryProp;
             var sql = SqlBuilder.ToDeleteSql(default(T), out primaryProp);
             //KeyValuePair<string, int> keyVal = new KeyValuePair<string, int>(primaryProp.Name, id);
-            var result = DapperHelper.Execute("dzhMySQL", sql, new { Key = id });
+            var result = DapperHelper.Execute("dzhMySQL", sql, null);
             return result > 1;
         }
         #endregion

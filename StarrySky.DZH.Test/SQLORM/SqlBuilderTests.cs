@@ -1,9 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StarrySky.DZH.ORMTool.SQLORM;
 using StarrySky.DZH.ORMTool.SQLORM.Entity;
+using StarrySky.DZH.ORMTool.SQLORM.ExpressionLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,15 +54,17 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
             };
             //sqlORM.UpdateEntityById(model);
 
-            //sqlORM.UpdateCustom(p=>p.DId ==1).;
+            sqlORM.UpdateCustom(p => p.DId == 1).Excute();
         }
 
 
         [TestMethod()]
         public void ToSelectTest()
         {
-            var model = sqlORM.Select(t => t).Where(t => t.DId == 1).Excute();
-            var model2 = sqlORM.Select(t => new { t.DId, t.DName }).Where(t => t.DId == 1).Excute();
+            var model1 = sqlORM.Select(t => t.DId).Excute();
+            var model2 = sqlORM.Select(t => t).Excute();
+            var model3 = sqlORM.Select(t => new { t.DId, t.DName }).Excute();
+            //var model1 = sqlORM.Select(t => t.DId).Where(t => t.DId == 1).Excute();
 
         }
 
@@ -73,7 +77,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
         [TestMethod()]
         public void InvalidTest()
         {
-            sqlORM.Invalid(p=>p.DId==3);
+            sqlORM.Invalid(p => p.DId == 3);
         }
     }
 }

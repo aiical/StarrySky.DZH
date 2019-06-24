@@ -40,7 +40,7 @@ namespace StarrySky.DZH.Util.Extensions
             return JsonConvert.DeserializeObject<T>(jsonStr, settings);
         }
         /// <summary>
-        /// 转成数值
+        /// 转成数值（decimal 转int 失败 18.0000 转 成0 了）
         /// </summary>
         /// <param name="value">对象</param>
         /// <param name="defaultValue">默认值0</param>
@@ -56,7 +56,7 @@ namespace StarrySky.DZH.Util.Extensions
             {
                 return (int)value;
             }
-            if (!int.TryParse(value.ToString(), out num))
+            if (!int.TryParse(value.ToString(), out num))// need fix bug
             {
                 return defaultValue;
             }

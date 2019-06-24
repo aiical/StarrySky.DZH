@@ -87,10 +87,12 @@
     <Compile Include="SQLHelper.cs" />
     <Compile Include="SQLORM\Common\DBConfig.cs" />
     <Compile Include="SQLORM\Common\DBTypeEnum.cs" />
-    <Compile Include="SQLORM\Common\ExpressionHelper.cs" />
+    <Compile Include="SQLORM\ExpressionLib\ExpressionTranslate.cs" />
     <Compile Include="SQLORM\Common\GenericPropMapping.cs" />
     <Compile Include="SQLORM\CustomAttribute\ORMAttributes.cs" />
     <Compile Include="SQLORM\Entity\PersonEntity.cs" />
+    <Compile Include="SQLORM\ExpressionLib\ExpressionProvider.cs" />
+    <Compile Include="SQLORM\ExpressionLib\ExpressionVisitorImpl.cs" />
     <Compile Include="SQLORM\SqlBuilder.cs" />
     <Compile Include="SQLORM\SqlORM.cs" />
   </ItemGroup>
