@@ -1,4 +1,5 @@
-﻿using StarrySky.DZH.ORMTool.SQLORM.CustomAttribute;
+﻿using StarrySky.DZH.ORMTool.SQLORM.Common;
+using StarrySky.DZH.ORMTool.SQLORM.CustomAttribute;
 using StarrySky.DZH.ORMTool.SQLORM.ExpressionLib;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,10 @@ namespace StarrySky.DZH.ORMTool.SQLORM
 {
     public class SqlORM<T> where T : class
     {
+        private DBOperateStatusEnum operateStatus = DBOperateStatusEnum.Default;
         private List<string> selectColumn = null;
         private List<string> updateColumn = null;
+        private List<string> whereColumn = null;
 
         public SqlORM()
         {
@@ -60,6 +63,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
         #region lambda 链式更新
         public SqlORM<T> UpdateCustom<V>(Expression<Func<T, V>> exp)
         {
+            operateStatus = DBOperateStatusEnum.Edit;
             updateColumn.AddRange(ExpressionTranslate.GetSelectColumn(exp));
 
             return this;
@@ -69,26 +73,32 @@ namespace StarrySky.DZH.ORMTool.SQLORM
         //按条件部分更新
         public virtual int Update(Expression<Func<T>> update, Expression<Func<T, bool>> where)
         {
+            operateStatus = DBOperateStatusEnum.Edit;
             return 0;
         }
         #endregion
 
         #region select
 
-        public SqlORM<T> Select<V>(Expression<Func<T, V>> selectCol)
+        public IEnumerable<V> Select<V>(Expression<Func<T, V>> selectCol)
         {
-            selectColumn.AddRange(ExpressionTranslate.GetSelectColumn(selectCol));
-            return this;
+            operateStatus = DBOperateStatusEnum.Query;
+            selectColumn=ExpressionTranslate.GetSelectColumn(selectCol);
+            return DapperHelper.GetSelectListWithParam<V>("dzhMySQL", GetQuerySql(), null);
         }
 
+        private string GetQuerySql()
+        {
+            Type type = typeof(T);
+            var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
+            string selectField = selectColumn == null ? "*" : string.Join(",", selectColumn);
+            string whereField = whereColumn == null ? "" : $"and 1=1";
+            return $@"SELECT {selectField}  FROM `{tableInfo.TableName}` WHERE 1=1 {whereField}";
+        }
         public SqlORM<T> Where(Expression<Func<T, bool>> where)
         {
+            whereColumn = ExpressionTranslate.GetWhereColumn(where);
             return this;
-        }
-        public T Excute()
-        {
-
-            return default(T);
         }
         #endregion
 
@@ -118,6 +128,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM
         /// <returns></returns>
         public bool Invalid(Expression<Func<T, bool>> predicate)
         {
+            operateStatus = DBOperateStatusEnum.Invalid;
             PropertyInfo primaryProp;
             var sql = SqlBuilder.ToDeleteSql(default(T), out primaryProp);
             //KeyValuePair<string, int> keyVal = new KeyValuePair<string, int>(primaryProp.Name, id);
@@ -125,5 +136,14 @@ namespace StarrySky.DZH.ORMTool.SQLORM
             return result > 1;
         }
         #endregion
+
+        public int ExcuteNonQuery()
+        {
+            if (operateStatus == DBOperateStatusEnum.Query)
+            {
+                throw new NotSupportedException("不支持");
+            }
+            return 0;
+        }
     }
 }

@@ -19,15 +19,13 @@ namespace StarrySky.DZH.ORMTool.SQLORM.ExpressionLib
             return result;
         }
 
-        public static List<string> GetUpdateColumn(Expression expr)
+        public static List<string> GetWhereColumn(Expression expr)
         {
-            //foreach (MemberAssignment item in exp.Bindings)
-            //{
-            //    string update = item.Member.Name + "=" + GetConstantStr((ConstantExpression)item.Expression);
-            //    member.Add(update);
-            //}
-            //var result = vistor.SelectColumnList;
-            return null;
+            var vistor = new ExpressionVisitorImpl();
+            vistor.Visit(expr);
+            var result = vistor.WhereColumnList;
+
+            return result;
         }
 
         /// <summary>

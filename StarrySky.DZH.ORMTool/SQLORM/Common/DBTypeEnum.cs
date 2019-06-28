@@ -15,4 +15,21 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Common
         SqlServer,
         Oracle,
     }
+
+    public enum DBOperateStatusEnum
+    {
+        Default,
+        Add,
+        Edit,
+        Query,
+        /// <summary>
+        /// 删除
+        /// </summary>
+        Delete,
+        /// <summary>
+        /// 无效
+        /// </summary>
+        Invalid,
+
+    }
 }

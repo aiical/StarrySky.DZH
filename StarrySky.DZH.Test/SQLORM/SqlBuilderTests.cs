@@ -54,17 +54,20 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
             };
             //sqlORM.UpdateEntityById(model);
 
-            sqlORM.UpdateCustom(p => p.DId == 1).Excute();
+            sqlORM.UpdateCustom(p => p.DId == 1).ExcuteNonQuery();
+            sqlORM.UpdateCustom(p => new DemoEntity() { DName = "horse", DAddress = "32" }).ExcuteNonQuery();//MemberInitExpression
+
         }
 
 
         [TestMethod()]
         public void ToSelectTest()
         {
-            var model1 = sqlORM.Select(t => t.DId).Excute();
-            var model2 = sqlORM.Select(t => t).Excute();
-            var model3 = sqlORM.Select(t => new { t.DId, t.DName }).Excute();
-            //var model1 = sqlORM.Select(t => t.DId).Where(t => t.DId == 1).Excute();
+            
+            //var model1 = sqlORM.Select(t => t.DId);  //MemberExpression
+            //var model2 = sqlORM.Select(t => t);  //ParameterExpression
+            //var model3 = sqlORM.Select(t => new { t.DId, t.DName }); //NewExpression
+            var model4 = sqlORM.Where(t => t.DId == 1).Select(t => t.DId);
 
         }
 

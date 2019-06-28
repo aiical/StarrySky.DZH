@@ -21,7 +21,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Entity
 
         public int DSex { get; set; }
 
-        public int DRowStauts { get; set; }
+        public int DRowStatus { get; set; }
 
         public DateTime DCreateTime { get; set; }
 

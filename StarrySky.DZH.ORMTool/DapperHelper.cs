@@ -34,7 +34,7 @@ namespace StarrySky.DZH.ORMTool
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public static IEnumerable<T> GetSelectList<T>(string sql, string dbName, bool isUseRead = false)
+        public static IEnumerable<T> GetSelectList<T>(string dbName, string sql,  bool isUseRead = false)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
@@ -62,7 +62,7 @@ namespace StarrySky.DZH.ORMTool
         /// <param name="sql"></param>
         /// <param name="param">参数化实体</param>
         /// <returns></returns>
-        public static IEnumerable<T> GetSelectListWithParam<T>(string sql, object param, string dbName, bool isUseRead = false)
+        public static IEnumerable<T> GetSelectListWithParam<T>(string dbName, string sql, object param, bool isUseRead = false)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
