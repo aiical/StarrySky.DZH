@@ -1,0 +1,12 @@
+﻿body {
+}
+/*超出长度省略号表示 ，配合标签Title鼠标悬停展示全部*/
+.simpleContent {
+    text-align: center; /*非必要*/
+    line-height: 30px; /*非必要*/
+    width: 60px; /*非必要*/
+    white-space: nowrap; /*核心属性*/
+    word-break: keep-all; /*核心属性*/
+    overflow: hidden; /*核心属性*/
+    text-overflow: ellipsis; /*核心属性*/
+}

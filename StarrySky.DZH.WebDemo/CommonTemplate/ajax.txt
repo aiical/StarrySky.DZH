@@ -1,0 +1,28 @@
+
+function beginMonitor() {
+    $.ajax({
+        type: "post",
+        url: "../Handler/ajaxHandler.ashx",
+        data: { Action: "BeginMonitor", agents: "dfd", CurrentAgentId: "df" },
+        dataType: "text",
+        success: function (data) { $("#consoleLog").val(data);},
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR + "..textStatus:" + textStatus + "..ex:" + errorThrown);
+        }
+    });
+}
+
+function putUser() {
+        $.ajax({
+            type: "put",
+            url: apiUr+"?userId="+$("#UserId").val(),
+            data:$("#userform").serialize(),
+            dataType: "json",
+            success:function(result){
+                alert("success");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            	alert("Status:" + XMLHttpRequest.status + "..readyState:" + XMLHttpRequest.readyState + "..textStatus:" + textStatus + "..ex:" + errorThrown);
+            }
+        });
+    }

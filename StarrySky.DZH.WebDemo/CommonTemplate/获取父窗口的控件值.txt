@@ -1,0 +1,1 @@
+var CurrentAgentId = window.opener.document.getElementById("agentId").value;
