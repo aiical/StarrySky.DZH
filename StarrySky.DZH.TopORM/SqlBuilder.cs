@@ -60,7 +60,7 @@ namespace StarrySky.DZH.TopORM
             return sbInsertSql.ToString();
         }
         /// <summary>
-        /// 无差别全字段更新
+        /// 全字段更新
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>

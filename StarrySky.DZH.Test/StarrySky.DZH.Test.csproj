@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="ChinaAreaCrawerTests.cs" />
     <Compile Include="DataConvert\UnitTest1.cs" />
-    <Compile Include="SqlORMTests.cs" />
+    <Compile Include="TopORMTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnumTest.cs" />

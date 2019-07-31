@@ -64,8 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Common\Class1.cs" />
     <Compile Include="Common\DBConfig.cs" />
     <Compile Include="Common\DBTypeEnum.cs" />
     <Compile Include="Common\GenericPropMapping.cs" />
@@ -78,7 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlBuilder.cs" />
     <Compile Include="SQLHelper.cs" />
-    <Compile Include="SqlORM.cs" />
+    <Compile Include="TopORM.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

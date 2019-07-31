@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace StarrySky.DZH.TopORM.Tests
 {
     [TestClass()]
-    public class SqlORMTests
+    public class TopORMTests
     {
-        SqlORM<DemoEntity> sqlORM = new SqlORM<DemoEntity>();
+        TopORM<DemoEntity> sqlORM = new TopORM<DemoEntity>();
         [TestMethod()]
         public void ToReflectTest()
         {

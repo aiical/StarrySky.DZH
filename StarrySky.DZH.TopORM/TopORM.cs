@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace StarrySky.DZH.TopORM
 {
-    public class SqlORM<T> where T : class
+    public class TopORM<T> where T : class
     {
         private DBOperateStatusEnum operateStatus = DBOperateStatusEnum.Default;
         private List<string> selectColumn = null;
         private List<string> updateColumn = null;
         private List<string> whereColumn = null;
 
-        public SqlORM()
+        public TopORM()
         {
             selectColumn = new List<string>();
             updateColumn = new List<string>();
@@ -61,7 +61,7 @@ namespace StarrySky.DZH.TopORM
         }
 
         #region lambda 链式更新
-        public SqlORM<T> UpdateCustom<V>(Expression<Func<T, V>> exp)
+        public TopORM<T> UpdateCustom<V>(Expression<Func<T, V>> exp)
         {
             operateStatus = DBOperateStatusEnum.Edit;
             updateColumn.AddRange(ExpressionTranslate.GetSelectColumn(exp));
@@ -95,7 +95,7 @@ namespace StarrySky.DZH.TopORM
             string whereField = whereColumn == null ? "" : $"and 1=1";
             return $@"SELECT {selectField}  FROM `{tableInfo.TableName}` WHERE 1=1 {whereField}";
         }
-        public SqlORM<T> Where(Expression<Func<T, bool>> where)
+        public TopORM<T> Where(Expression<Func<T, bool>> where)
         {
             whereColumn = ExpressionTranslate.GetWhereColumn(where);
             return this;
