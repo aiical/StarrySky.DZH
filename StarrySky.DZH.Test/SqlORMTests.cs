@@ -1,18 +1,16 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StarrySky.DZH.ORMTool.SQLORM;
-using StarrySky.DZH.ORMTool.SQLORM.Entity;
-using StarrySky.DZH.ORMTool.SQLORM.ExpressionLib;
+using StarrySky.DZH.TopORM;
+using StarrySky.DZH.TopORM.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarrySky.DZH.ORMTool.SQLORM.Tests
+namespace StarrySky.DZH.TopORM.Tests
 {
     [TestClass()]
-    public class SqlBuilderTests
+    public class SqlORMTests
     {
         SqlORM<DemoEntity> sqlORM = new SqlORM<DemoEntity>();
         [TestMethod()]
@@ -63,7 +61,7 @@ namespace StarrySky.DZH.ORMTool.SQLORM.Tests
         [TestMethod()]
         public void ToSelectTest()
         {
-            
+
             //var model1 = sqlORM.Select(t => t.DId);  //MemberExpression
             //var model2 = sqlORM.Select(t => t);  //ParameterExpression
             //var model3 = sqlORM.Select(t => new { t.DId, t.DName }); //NewExpression

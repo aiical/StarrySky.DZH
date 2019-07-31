@@ -1,4 +1,4 @@
-﻿using StarrySky.DZH.ORMTool.SQLORM.CustomAttribute;
+﻿using StarrySky.DZH.TopORM.CustomAttribute;
 using StarrySky.DZH.Util.Extensions;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarrySky.DZH.ORMTool.SQLORM
+namespace StarrySky.DZH.TopORM
 {
     public class SqlBuilder
     {

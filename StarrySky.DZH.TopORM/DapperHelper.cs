@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using StarrySky.DZH.ORMTool.SQLORM.Common;
+using StarrySky.DZH.TopORM.Common;
 using MySql.Data.MySqlClient;
 
-namespace StarrySky.DZH.ORMTool
+namespace StarrySky.DZH.TopORM
 {
     /// <summary>
     /// author:dingzhenhua

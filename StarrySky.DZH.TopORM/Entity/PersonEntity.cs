@@ -1,12 +1,12 @@
-﻿using StarrySky.DZH.ORMTool.SQLORM.Common;
-using StarrySky.DZH.ORMTool.SQLORM.CustomAttribute;
+﻿using StarrySky.DZH.TopORM.Common;
+using StarrySky.DZH.TopORM.CustomAttribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarrySky.DZH.ORMTool.SQLORM.Entity
+namespace StarrySky.DZH.TopORM.Entity
 {
     /// <summary>
     /// 不用的字段加Ignore 否则报错MySql.Data.MySqlClient.MySqlException:“Unknown column 'xxx' in 'field list'”

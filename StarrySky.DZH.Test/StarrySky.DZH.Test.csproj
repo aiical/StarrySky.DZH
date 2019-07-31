@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="ChinaAreaCrawerTests.cs" />
     <Compile Include="DataConvert\UnitTest1.cs" />
-    <Compile Include="SQLORM\SqlBuilderTests.cs" />
+    <Compile Include="SqlORMTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnumTest.cs" />
@@ -69,6 +69,10 @@
     <ProjectReference Include="..\StarrySky.DZH.RabbitMQ\StarrySky.DZH.RabbitMQ.csproj">
       <Project>{41D1936B-4FFC-4095-A996-385B46F3FA10}</Project>
       <Name>StarrySky.DZH.RabbitMQ</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StarrySky.DZH.TopORM\StarrySky.DZH.TopORM.csproj">
+      <Project>{D57C32CE-5835-407D-ACF0-5132E5B41773}</Project>
+      <Name>StarrySky.DZH.TopORM</Name>
     </ProjectReference>
     <ProjectReference Include="..\StarrySky.DZH.Util\StarrySky.DZH.Util.csproj">
       <Project>{02491bee-5c11-43d7-9728-3d71a2e1ed94}</Project>

@@ -1,11 +1,11 @@
-﻿using StarrySky.DZH.ORMTool.SQLORM.Common;
+﻿using StarrySky.DZH.TopORM.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarrySky.DZH.ORMTool.SQLORM.CustomAttribute
+namespace StarrySky.DZH.TopORM.CustomAttribute
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class TableInfoAttribute : Attribute

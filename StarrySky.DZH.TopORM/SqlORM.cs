@@ -1,6 +1,6 @@
-﻿using StarrySky.DZH.ORMTool.SQLORM.Common;
-using StarrySky.DZH.ORMTool.SQLORM.CustomAttribute;
-using StarrySky.DZH.ORMTool.SQLORM.ExpressionLib;
+﻿using StarrySky.DZH.TopORM.Common;
+using StarrySky.DZH.TopORM.CustomAttribute;
+using StarrySky.DZH.TopORM.ExpressionLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarrySky.DZH.ORMTool.SQLORM
+namespace StarrySky.DZH.TopORM
 {
     public class SqlORM<T> where T : class
     {

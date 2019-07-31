@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarrySky.DZH.ORMTool.SQLORM.Common
+namespace StarrySky.DZH.TopORM.Common
 {
     public static class DBConfig
     {
