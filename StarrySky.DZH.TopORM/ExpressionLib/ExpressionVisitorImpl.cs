@@ -11,7 +11,9 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
     public class ExpressionVisitorImpl : ExpressionVisitor
     {
         public List<string> SelectColumnList = new List<string>();
+        public List<string> UpdateColumnList = new List<string>();
         public List<string> WhereColumnList = new List<string>();
+        //public List<object> Params
 
         public override Expression Visit(Expression node)
         {

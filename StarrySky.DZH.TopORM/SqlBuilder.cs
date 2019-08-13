@@ -66,9 +66,9 @@ namespace StarrySky.DZH.TopORM
         /// <param name="obj"></param>
         /// <param name="prop"></param>
         /// <returns></returns>
-        public static string ToUpdateSql<T>(T obj, out PropertyInfo prop)
+        public static string ToUpdateSql<T>(T obj)
         {
-            prop = null;
+            PropertyInfo keyProp = null;
             StringBuilder sbSql = new StringBuilder();
             Type type = typeof(T);
             var properties = type.GetProperties();//获取属性
@@ -83,7 +83,7 @@ namespace StarrySky.DZH.TopORM
                 object[] Ignore = p.GetCustomAttributes(typeof(IgnoreFieldAttribute), false);
                 if (!PrimaryKey.IsNullOrEmptyCollection())
                 {
-                    prop = p;
+                    keyProp = p;
                     continue;
                 }
                 if (!Ignore.IsNullOrEmptyCollection())
@@ -96,9 +96,11 @@ namespace StarrySky.DZH.TopORM
                 }
             }
             var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
-
-            sbSql.AppendFormat($"UPDATE {tableInfo.TableName} SET {string.Join(",", setcolumn)} where {prop.Name}=@{prop.Name}");
-
+            if (keyProp == null||(long)keyProp.GetValue(obj)==0L || setcolumn.IsNullOrEmptyCollection())
+            {
+                return "";
+            }
+            sbSql.AppendFormat($"UPDATE {tableInfo.TableName} SET {string.Join(",", setcolumn)} where {keyProp.Name}=@{keyProp.Name}");
             return sbSql.ToString();
         }
 
@@ -125,7 +127,13 @@ namespace StarrySky.DZH.TopORM
             }
             return $"delete from {tableInfo.TableName} where {primaryKey}=@Key";
         }
-
+        /// <summary>
+        /// 列是否修改
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public static bool GetChangeStage<T>(T obj, PropertyInfo p)
         {
             var value = p.GetValue(obj);

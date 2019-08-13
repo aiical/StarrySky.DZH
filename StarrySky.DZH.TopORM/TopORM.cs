@@ -54,8 +54,7 @@ namespace StarrySky.DZH.TopORM
         #region update
         public bool UpdateEntityById(T model)
         {
-            PropertyInfo primaryProp;
-            var sql = SqlBuilder.ToUpdateSql(model, out primaryProp);
+            var sql = SqlBuilder.ToUpdateSql(model);
             var id = DapperHelper.Execute("dzhMySQL", sql, model);
             return id > 0;
         }
@@ -64,18 +63,12 @@ namespace StarrySky.DZH.TopORM
         public TopORM<T> UpdateCustom<V>(Expression<Func<T, V>> exp)
         {
             operateStatus = DBOperateStatusEnum.Edit;
-            updateColumn.AddRange(ExpressionTranslate.GetSelectColumn(exp));
+            updateColumn.AddRange(ExpressionTranslate.GetUpdateColumn(exp));
 
             return this;
         }
         #endregion
 
-        //按条件部分更新
-        public virtual int Update(Expression<Func<T>> update, Expression<Func<T, bool>> where)
-        {
-            operateStatus = DBOperateStatusEnum.Edit;
-            return 0;
-        }
         #endregion
 
         #region select
@@ -95,11 +88,7 @@ namespace StarrySky.DZH.TopORM
             string whereField = whereColumn == null ? "" : $"and 1=1";
             return $@"SELECT {selectField}  FROM `{tableInfo.TableName}` WHERE 1=1 {whereField}";
         }
-        public TopORM<T> Where(Expression<Func<T, bool>> where)
-        {
-            whereColumn = ExpressionTranslate.GetWhereColumn(where);
-            return this;
-        }
+        
         #endregion
 
         #region delete
@@ -136,6 +125,17 @@ namespace StarrySky.DZH.TopORM
             return result > 1;
         }
         #endregion
+
+        /// <summary>
+        /// 过滤条件
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public TopORM<T> Where(Expression<Func<T, bool>> where)
+        {
+            whereColumn = ExpressionTranslate.GetWhereColumn(where);
+            return this;
+        }
 
         public int ExcuteNonQuery()
         {

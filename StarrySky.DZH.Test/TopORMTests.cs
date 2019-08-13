@@ -52,8 +52,10 @@ namespace StarrySky.DZH.TopORM.Tests
             };
             //sqlORM.UpdateEntityById(model);
 
-            sqlORM.UpdateCustom(p => p.DId == 1).ExcuteNonQuery();
-            sqlORM.UpdateCustom(p => new DemoEntity() { DName = "horse", DAddress = "32" }).ExcuteNonQuery();//MemberInitExpression
+           // sqlORM.UpdateCustom(p => p.DRowStatus == 2).ExcuteNonQuery();
+            //sqlORM.UpdateCustom(p => p.DRowStatus == 2 && p.DCreateUser == "dzh").ExcuteNonQuery();
+
+            sqlORM.UpdateCustom(p => new DemoEntity() { DSex = 111, DRowStatus = 22 }).ExcuteNonQuery();//MemberInitExpression
 
         }
 

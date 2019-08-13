@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckCode\CheckCodeHelperTests.cs" />
     <Compile Include="ChinaAreaCrawerTests.cs" />
     <Compile Include="DataConvert\UnitTest1.cs" />
     <Compile Include="TopORMTests.cs" />
