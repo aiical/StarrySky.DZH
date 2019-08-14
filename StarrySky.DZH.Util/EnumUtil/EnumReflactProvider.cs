@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace StarrySky.DZH.Util.EnumUtil
 {
     /// <summary>
-    /// 枚举反射到静态字典中获取描述
+    /// 枚举反射到静态字典中获取描述，以后使用遍历字典，减少反射成本
     /// </summary>
     public static class EnumReflactProvider
     {

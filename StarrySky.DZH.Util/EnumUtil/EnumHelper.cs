@@ -14,21 +14,6 @@ namespace StarrySky.DZH.Util.EnumUtil
     /// </summary>
     public static class EnumHelper
     {
-        #region private
-        /// <summary>
-        /// 获取字段Description
-        /// </summary>
-        /// <param name="fieldInfo">FieldInfo</param>
-        /// <returns>DescriptionAttribute[] </returns>
-        private static DescriptionAttribute[] GetDescriptAttr(this FieldInfo fieldInfo)
-        {
-            if (fieldInfo != null)
-            {
-                return (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
-            }
-            return null;
-        }
-        #endregion
 
         /// <summary>
         /// 从枚举中获取Description
@@ -37,26 +22,32 @@ namespace StarrySky.DZH.Util.EnumUtil
         /// <returns>描述内容Description</returns>
         public static string GetEnumDescription(this Enum e)
         {
-            if (e == null)
+            try
+            {
+                if (e == null)
+                {
+                    return string.Empty;
+                }
+                DescriptionAttribute attr = null;
+
+                // 获取枚举字段。
+                FieldInfo fieldInfo = e.GetType().GetField(e.ToString());
+                if (fieldInfo != null)
+                {
+                    // 获取描述的属性。
+                    attr = Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute), false) as DescriptionAttribute;
+                }
+
+                // 返回结果
+                if (attr != null && !string.IsNullOrEmpty(attr.Description))
+                    return attr.Description;
+                else
+                    return string.Empty;
+            }
+            catch
             {
                 return string.Empty;
             }
-            Type enumType = e.GetType();
-            DescriptionAttribute attr = null;
-
-            // 获取枚举字段。
-            FieldInfo fieldInfo = enumType.GetField(e.ToString());
-            if (fieldInfo != null)
-            {
-                // 获取描述的属性。
-                attr = Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute), false) as DescriptionAttribute;
-            }
-
-            // 返回结果
-            if (attr != null && !string.IsNullOrEmpty(attr.Description))
-                return attr.Description;
-            else
-                return string.Empty;
         }
 
         /// <summary>
@@ -91,7 +82,7 @@ namespace StarrySky.DZH.Util.EnumUtil
             Type _type = typeof(T);
             foreach (FieldInfo field in _type.GetFields())
             {
-                DescriptionAttribute[] _curDesc = field.GetDescriptAttr();
+                DescriptionAttribute[] _curDesc = (DescriptionAttribute[])field.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 if (_curDesc != null && _curDesc.Length > 0)
                 {
                     if (_curDesc[0].Description == description)
@@ -146,8 +137,6 @@ namespace StarrySky.DZH.Util.EnumUtil
             {
                 list.Add(new EnumKeyValue() { Key = 0, Name = "全部" });
             }
-
-            #region 方式一
             foreach (var item in typeof(T).GetFields())
             {
                 // 获取描述
@@ -166,30 +155,6 @@ namespace StarrySky.DZH.Util.EnumUtil
                     list.Add(model);
                 }
             }
-            #endregion
-
-            #region 方式二
-            //foreach (int item in Enum.GetValues(typeof(T)))
-            //{
-            //    // 获取描述
-            //    FieldInfo fi = typeof(T).GetField(Enum.GetName(typeof(T), item));
-            //    var attr = fi.GetCustomAttribute(typeof(DescriptionAttribute), false) as DescriptionAttribute;
-            //    if (attr != null && !string.IsNullOrEmpty(attr.Description))
-            //    {
-            //        // 跳过过滤项
-            //        if (Array.IndexOf<string>(filterItem, attr.Description) != -1)
-            //        {
-            //            continue;
-            //        }
-            //        // 添加
-            //        EnumKeyValue model = new EnumKeyValue();
-            //        model.Key = item;
-            //        model.Name = attr.Description;
-            //        list.Add(model);
-            //    }
-            //} 
-            #endregion
-
             return list;
         }
 
