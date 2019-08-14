@@ -70,15 +70,17 @@ namespace StarrySky.DZH.TopORM.Tests
         public void ToSelectTest()
         {
             #region 测试通过
-            //var model1 = sqlORM.Select(t => t.DId);  //MemberExpression
+            var model1 = sqlORM.Select(t => t.DId);  //MemberExpression
             //var model2 = sqlORM.Select(t => t);  //ParameterExpression
             //var model3 = sqlORM.Select(t => new { t.DId, t.DName }); //NewExpression
             #endregion
 
+            var model5 = sqlORM.Where(t => t.DId == 1 && t.DSex == 22).Select(t => t.DId);
             var model4 = sqlORM.Where(t => t.DId == 1 || t.DSex == 22).Select(t => t.DId);
 
-
-            var model5 = sqlORM.Where(t => t.DId == 1 && (t.DRowStatus == 2 || t.DSex == 22) && !(t.DRowStatus == 3)).Select(t => t.DId);
+            //var model6 = sqlORM.Where(t => t.DName.Substring(0, 2) == "aa").Select(t => t.DId);
+            //var model7 = sqlORM.Where(t => t.DName.Contains("aa")).Select(t => t.DId);
+            var model10 = sqlORM.Where(t => t.DId == 1 && (t.DRowStatus == 2 || t.DSex == 22) && !(t.DRowStatus == 3)).Select(t => t.DId);
 
         }
 

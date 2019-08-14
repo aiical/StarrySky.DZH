@@ -36,6 +36,16 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
                     return "<";
                 case ExpressionType.LessThanOrEqual:
                     return "<=";
+                case ExpressionType.Add:
+                    return "+";
+                case ExpressionType.Subtract:
+                    return "-";
+                case ExpressionType.Multiply:
+                    return "*";
+                case ExpressionType.Divide:
+                    return "/";
+                case ExpressionType.Modulo:
+                    return "%";
                 case (ExpressionType.Equal):
                     return "=";
                 default:

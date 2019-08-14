@@ -12,6 +12,8 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
 {
     public class ExpressionVisitorImpl : ExpressionVisitor
     {
+        private readonly IComparer<ExpressionType> m_comparer = new OperatorPrecedenceComparer();
+
         private ExpressionVisitorImpl() { }
 
         public ExpressionVisitorImpl(TranslatorEnum etranslator)
@@ -49,6 +51,20 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
         {
             return Visit(node.Body);
         }
+        /// <summary>
+        /// 检查是否需要加括号, true 代表父节点是or
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="parentType"></param>
+        /// <returns></returns>
+        protected bool CheckBinary(BinaryExpression node, ExpressionType parentType)
+        {
+            if (m_comparer.Compare(parentType, node.NodeType) > 0)
+            {
+                return true;
+            }
+            return false;
+        }
 
         //
         // 摘要:
@@ -62,8 +78,12 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
         //     修改后的表达式，如果它或任何子表达式已修改;否则，返回原始的表达式。
         protected override Expression VisitBinary(BinaryExpression node)
         {
+            StringBuilder sbstr = new StringBuilder();
             if (node.Left is BinaryExpression)
             {
+                if (CheckBinary(node.Left as BinaryExpression, node.NodeType)) {
+
+                }
                 Expression left = this.Visit(node.Left);
                 Expression right = this.Visit(node.Right);
             }
