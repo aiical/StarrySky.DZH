@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StarrySky.DZH.TopORM;
 using StarrySky.DZH.TopORM.Entity;
+using StarrySky.DZH.Util.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,14 +49,19 @@ namespace StarrySky.DZH.TopORM.Tests
                 DId = 1,
                 DName = "luffy",
                 DSex = 222,
-                DAddress = "3"
+                DAddress = "3",
+                DUpdateTime = "2018-01-01".PackDateTime().AddDays(1)
             };
+            #region 测试通过
             //sqlORM.UpdateEntityById(model);
+            //sqlORM.UpdateCustom(p => new DemoEntity() { DSex = 111, DRowStatus = 22 }).ExcuteNonQuery();//MemberInitExpression
+            //var res=sqlORM.UpdateCustom(p => p.DRowStatus == 1).ExcuteNonQuery();
+            //sqlORM.UpdateCustom(p => p.DRowStatus == 2 && p.DCreateUser == "dzh" && p.DUpdateTime == model.DUpdateTime).ExcuteNonQuery();
+            #endregion
 
-           // sqlORM.UpdateCustom(p => p.DRowStatus == 2).ExcuteNonQuery();
-            //sqlORM.UpdateCustom(p => p.DRowStatus == 2 && p.DCreateUser == "dzh").ExcuteNonQuery();
 
-            sqlORM.UpdateCustom(p => new DemoEntity() { DSex = 111, DRowStatus = 22 }).ExcuteNonQuery();//MemberInitExpression
+
+
 
         }
 
@@ -63,11 +69,16 @@ namespace StarrySky.DZH.TopORM.Tests
         [TestMethod()]
         public void ToSelectTest()
         {
-
+            #region 测试通过
             //var model1 = sqlORM.Select(t => t.DId);  //MemberExpression
             //var model2 = sqlORM.Select(t => t);  //ParameterExpression
             //var model3 = sqlORM.Select(t => new { t.DId, t.DName }); //NewExpression
-            var model4 = sqlORM.Where(t => t.DId == 1).Select(t => t.DId);
+            #endregion
+
+            var model4 = sqlORM.Where(t => t.DId == 1 || t.DSex == 22).Select(t => t.DId);
+
+
+            var model5 = sqlORM.Where(t => t.DId == 1 && (t.DRowStatus == 2 || t.DSex == 22) && !(t.DRowStatus == 3)).Select(t => t.DId);
 
         }
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dapper;
+using StarrySky.DZH.TopORM.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,73 +12,50 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
     /// <summary>
     /// 
     /// </summary>
-    public class ExpressionTranslate
+    public class ExpressionTranslator
     {
-        /*
+        /* 表达式分类
          * BinaryExpression 表示包含二元运算符的表达式。 可以理解为一个子表达式,如 b.Number>10
          * MemberExpression 表示访问字段或属性。 如 b.Number
          * NewArrayExpression 表示创建新数组并可能初始化该新数组的元素
          * MethodCallExpression 表示对静态方法或实例方法的调用 如 b.Name.Contains("123")
          * ConstantExpression 表示具有常量值的表达式 如 b.Name="hubro" 
          * UnaryExpression 表示包含一元运算符的表达式
+         * 
+         * 示例：
+         * p=>p.CreateTime==DateTime.Now  (==右边部分为：MemberExpression)
+         * p=>p.CreateTime==DateTime.Now.AddDays(1) (==右边部分为：MethodCallExpression)
+         * p=>p.CreateTime==Convert.ToDateTime("2019-01-01") (==右边部分为：MethodCallExpression)
+         * p=>p.CreateTime=="2019-01-01".PackDateTime() (==右边部分为：MethodCallExpression)
+         * p.DUpdateTime == DateTime.Now.PackDateTime() (==右边部分为：MethodCallExpression)
          */
-
-        public static string ToSqlOperator(ExpressionType type)
-        {
-            switch (type)
-            {
-                case (ExpressionType.AndAlso):
-                case (ExpressionType.And):
-                    return " AND ";
-                case (ExpressionType.OrElse):
-                case (ExpressionType.Or):
-                    return " OR ";
-                case (ExpressionType.Not):
-                    return " NOT ";
-                case (ExpressionType.NotEqual):
-                    return "<>";
-                case ExpressionType.GreaterThan:
-                    return ">";
-                case ExpressionType.GreaterThanOrEqual:
-                    return ">=";
-                case ExpressionType.LessThan:
-                    return "<";
-                case ExpressionType.LessThanOrEqual:
-                    return "<=";
-                case (ExpressionType.Equal):
-                    return "=";
-                default:
-                    throw new Exception("不支持该方法");
-            }
-        }
-
 
         public static List<string> GetSelectColumn(Expression expr)
         {
             //var expression = GetRealExpression(expr);
-            var vistor = new ExpressionVisitorImpl();
+            var vistor = new ExpressionVisitorImpl(TranslatorEnum.Select);
             vistor.Visit(expr);
             var result = vistor.SelectColumnList;
 
             return result;
         }
 
-        public static List<string> GetUpdateColumn(Expression expr)
+        public static List<string> GetUpdateColumn(Expression expr, DynamicParameters parameters)
         {
             //var expression = GetRealExpression(expr);
-            var vistor = new ExpressionVisitorImpl();
+            var vistor = new ExpressionVisitorImpl(TranslatorEnum.Update);
             vistor.Visit(expr);
             var result = vistor.UpdateColumnList;
-
+            parameters.AddDynamicParams(vistor.Parameters);
             return result;
         }
 
-        public static List<string> GetWhereColumn(Expression expr)
+        public static List<string> GetWhereColumn(Expression expr, DynamicParameters parameters)
         {
-            var vistor = new ExpressionVisitorImpl();
+            var vistor = new ExpressionVisitorImpl(TranslatorEnum.Where);
             vistor.Visit(expr);
             var result = vistor.WhereColumnList;
-
+            parameters.AddDynamicParams(vistor.Parameters);
             return result;
         }
 

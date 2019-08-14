@@ -25,11 +25,12 @@ namespace StarrySky.DZH.Util.EnumUtil
             string desc = "";
             try
             {
-                if (enumDic == null || !enumDic.Any() || !enumDic.Keys.Contains(en.GetType().FullName))
+                string enumFullName = en.GetType().FullName;
+                if (enumDic == null || !enumDic.Any() || !enumDic.Keys.Contains(enumFullName))
                 {
                     lock (Locker)
                     {
-                        if (enumDic == null || !enumDic.Any() || !enumDic.Keys.Contains(en.GetType().FullName))
+                        if (enumDic == null || !enumDic.Any() || !enumDic.Keys.Contains(enumFullName))
                         {
                             Dictionary<int, String> enumFieldDic = new Dictionary<int, string>();
                             foreach (Enum enumValue in Enum.GetValues(en.GetType()))
@@ -38,12 +39,12 @@ namespace StarrySky.DZH.Util.EnumUtil
                                 string description = enumValue.GetEnumDescription();
                                 enumFieldDic.Add(key, description);
                             }
-                            enumDic.Add(en.GetType().FullName, enumFieldDic);
+                            enumDic.Add(enumFullName, enumFieldDic);
                         }
                     }
                 }
                 Dictionary<int, String> result = new Dictionary<int, string>();
-                enumDic.TryGetValue(en.GetType().FullName, out result);
+                enumDic.TryGetValue(enumFullName, out result);
                 result.TryGetValue(en.GetHashCode(), out desc);
             }
             catch (Exception ex)

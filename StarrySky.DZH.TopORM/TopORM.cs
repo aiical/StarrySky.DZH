@@ -1,6 +1,8 @@
-﻿using StarrySky.DZH.TopORM.Common;
+﻿using Dapper;
+using StarrySky.DZH.TopORM.Common;
 using StarrySky.DZH.TopORM.CustomAttribute;
 using StarrySky.DZH.TopORM.ExpressionLib;
+using StarrySky.DZH.Util.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +19,17 @@ namespace StarrySky.DZH.TopORM
         private List<string> selectColumn = null;
         private List<string> updateColumn = null;
         private List<string> whereColumn = null;
+        //声明动态参数
+        private DynamicParameters updateParameters = null;
+        private DynamicParameters whereParameters = null;
 
         public TopORM()
         {
             selectColumn = new List<string>();
             updateColumn = new List<string>();
+            whereColumn = new List<string>();
+            updateParameters = new DynamicParameters();
+            whereParameters = new DynamicParameters();
         }
 
         #region insert
@@ -63,8 +71,7 @@ namespace StarrySky.DZH.TopORM
         public TopORM<T> UpdateCustom<V>(Expression<Func<T, V>> exp)
         {
             operateStatus = DBOperateStatusEnum.Edit;
-            updateColumn.AddRange(ExpressionTranslate.GetUpdateColumn(exp));
-
+            updateColumn = ExpressionTranslator.GetUpdateColumn(exp, updateParameters);
             return this;
         }
         #endregion
@@ -76,8 +83,8 @@ namespace StarrySky.DZH.TopORM
         public IEnumerable<V> Select<V>(Expression<Func<T, V>> selectCol)
         {
             operateStatus = DBOperateStatusEnum.Query;
-            selectColumn=ExpressionTranslate.GetSelectColumn(selectCol);
-            return DapperHelper.GetSelectListWithParam<V>("dzhMySQL", GetQuerySql(), null);
+            selectColumn = ExpressionTranslator.GetSelectColumn(selectCol);
+            return DapperHelper.GetSelectListWithParam<V>("dzhMySQL", GetQuerySql(), whereParameters);
         }
 
         private string GetQuerySql()
@@ -85,10 +92,10 @@ namespace StarrySky.DZH.TopORM
             Type type = typeof(T);
             var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
             string selectField = selectColumn == null ? "*" : string.Join(",", selectColumn);
-            string whereField = whereColumn == null ? "" : $"and 1=1";
+            string whereField = whereColumn == null ? "" : string.Join("and", whereColumn);
             return $@"SELECT {selectField}  FROM `{tableInfo.TableName}` WHERE 1=1 {whereField}";
         }
-        
+
         #endregion
 
         #region delete
@@ -133,17 +140,32 @@ namespace StarrySky.DZH.TopORM
         /// <returns></returns>
         public TopORM<T> Where(Expression<Func<T, bool>> where)
         {
-            whereColumn = ExpressionTranslate.GetWhereColumn(where);
+            whereColumn = ExpressionTranslator.GetWhereColumn(where, whereParameters);
             return this;
         }
 
         public int ExcuteNonQuery()
         {
-            if (operateStatus == DBOperateStatusEnum.Query)
+            if (operateStatus != DBOperateStatusEnum.Edit)
             {
                 throw new NotSupportedException("不支持");
             }
-            return 0;
+            var parameters = updateParameters;
+            parameters.AddDynamicParams(whereParameters);
+            return DapperHelper.Execute("dzhMySQL", GetUpdateSql(), parameters);
+        }
+
+        private string GetUpdateSql()
+        {
+            if (updateColumn.IsNullOrEmptyCollection())
+            {
+                return "";
+            }
+            Type type = typeof(T);
+            var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
+            string updateField = string.Join(",", updateColumn);
+            string whereField = whereColumn == null ? "" : $"and 1=1";
+            return $@"UPDATE `{tableInfo.TableName}` SET {updateField} WHERE 1=1 {whereField}";
         }
     }
 }
