@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace StarrySky.DZH.TopORM.Entity
 {
     /// <summary>
-    /// 不用的字段加Ignore 否则报错MySql.Data.MySqlClient.MySqlException:“Unknown column 'xxx' in 'field list'”
+    /// 不存表的字段加Ignore（不存or表没有） 否则报错MySql.Data.MySqlClient.MySqlException:“Unknown column 'xxx' in 'field list'”
     /// </summary>
     [TableInfo("Demo", DBTypeEnum.MySQL)]
     public class DemoEntity

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using StarrySky.DZH.TopORM.Common;
+using StarrySky.DZH.TopORM.CustomAttribute;
 using StarrySky.DZH.Util.Extensions;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
         private TranslatorEnum _eTranslator = TranslatorEnum.Default;
         public List<string> SelectColumnList = new List<string>();
         public List<string> UpdateColumnList = new List<string>();
-        public List<string> WhereColumnList = new List<string>();
+        public StringBuilder WhereStrBuilder = new StringBuilder();
         //声明动态参数
         public DynamicParameters Parameters = new DynamicParameters();
         public int AutoIncrementId = 0;
@@ -52,14 +53,18 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
             return Visit(node.Body);
         }
         /// <summary>
-        /// 检查是否需要加括号, true 代表父节点是or
+        /// 检查是否需要加括号, true需要括号
         /// </summary>
         /// <param name="node"></param>
         /// <param name="parentType"></param>
         /// <returns></returns>
         protected bool CheckBinary(BinaryExpression node, ExpressionType parentType)
         {
-            if (m_comparer.Compare(parentType, node.NodeType) > 0)
+            if (node == null)
+            {
+                return false;
+            }
+            if (m_comparer.Compare(parentType, node.NodeType) != 0)
             {
                 return true;
             }
@@ -79,42 +84,79 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
         protected override Expression VisitBinary(BinaryExpression node)
         {
             StringBuilder sbstr = new StringBuilder();
-            if (node.Left is BinaryExpression)
+            // t=>!(t.DRowStatus == 3) 非BinaryExpression
+            if (node.Left is BinaryExpression || node.Right is BinaryExpression)
             {
-                if (CheckBinary(node.Left as BinaryExpression, node.NodeType)) {
-
+                var ifLeft = CheckBinary(node.Left as BinaryExpression, node.NodeType);
+                var ifRight = CheckBinary(node.Right as BinaryExpression, node.NodeType);
+                if (ifLeft)
+                {
+                    WhereStrBuilder.Append(" ( ");
                 }
                 Expression left = this.Visit(node.Left);
+                if (ifLeft)
+                {
+                    WhereStrBuilder.Append(" ) ");
+                }
+                WhereStrBuilder.Append(node.NodeType.ToSqlOperator());
+                if (ifRight)
+                {
+                    WhereStrBuilder.Append(" ( ");
+                }
                 Expression right = this.Visit(node.Right);
+                if (ifRight)
+                {
+                    WhereStrBuilder.Append(" ) ");
+                }
             }
             else
             {
-                string name = (node.Left as MemberExpression).Member.Name;
-                object value = string.Empty;
-                if (node.Right is ConstantExpression)
+                MemberExpression leftExpress = node.Left as MemberExpression;
+                if (leftExpress == null)
                 {
-                    value = (node.Right as ConstantExpression).Value.ToString();
+                    throw new NotImplementedException($"TopORM不支持当前类型{node.ToString()}");
                 }
-                else if (node.Right is MethodCallExpression)
+                object[] PrimaryKey = leftExpress.Member.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
+                object[] Ignore = leftExpress.Member.GetCustomAttributes(typeof(IgnoreFieldAttribute), false);
+                if (!PrimaryKey.IsNullOrEmptyCollection() && _eTranslator == TranslatorEnum.Update)
                 {
-                    value = Expression.Lambda(node.Right as MethodCallExpression).Compile().DynamicInvoke();//Compile有性能消耗
+                    throw new Exception("主键字段不支持更新");
                 }
-                else if (node.Right is MemberExpression)
+                if (!Ignore.IsNullOrEmptyCollection())
                 {
-                    value = Expression.Lambda(node.Right as MemberExpression).Compile().DynamicInvoke();
+                    return node;
                 }
+                else
+                {
+                    string name = leftExpress.Member.Name;
+                    object value = string.Empty;
+                    if (node.Right is ConstantExpression)
+                    {
+                        value = (node.Right as ConstantExpression).Value.ToString();
+                    }
+                    else if (node.Right is MethodCallExpression)
+                    {
+                        value = Expression.Lambda(node.Right as MethodCallExpression).Compile().DynamicInvoke();//Compile有性能消耗
+                    }
+                    else if (node.Right is MemberExpression)
+                    {
+                        value = Expression.Lambda(node.Right as MemberExpression).Compile().DynamicInvoke();
+                    }
 
-                string paramsName = $"{name}{AutoIncrementId.ToString()}";
-                if (_eTranslator == TranslatorEnum.Update)
-                {
-                    UpdateColumnList.Add($"{name}{node.NodeType.ToSqlOperator()}@{paramsName}");
+                    string paramsName = "";
+                    if (_eTranslator == TranslatorEnum.Update)
+                    {
+                        paramsName = $"{name}{AutoIncrementId.ToString()}";
+                        UpdateColumnList.Add($"{name}{node.NodeType.ToSqlOperator()}@{paramsName}");
+                    }
+                    else if (_eTranslator == TranslatorEnum.Where)
+                    {
+                        paramsName = $"{name}_W{AutoIncrementId.ToString()}";
+                        WhereStrBuilder.Append($"{name}{node.NodeType.ToSqlOperator()}@{paramsName}");
+                    }
+                    Parameters.Add($"{paramsName}", value);
+                    AutoIncrementId++;
                 }
-                else if (_eTranslator == TranslatorEnum.Where)
-                {
-                    WhereColumnList.Add($"{name}{node.NodeType.ToSqlOperator()}@{paramsName}");
-                }
-                Parameters.Add($"{paramsName}", value);
-                AutoIncrementId++;
             }
             return node;
         }
@@ -183,14 +225,26 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
             }
             foreach (var item in node.Bindings)
             {
-                string paramsName = $"{item.Member.Name}{AutoIncrementId.ToString()}";
+                object[] PrimaryKey = item.Member.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
+                object[] Ignore = item.Member.GetCustomAttributes(typeof(IgnoreFieldAttribute), false);
+                if (!PrimaryKey.IsNullOrEmptyCollection() && _eTranslator == TranslatorEnum.Update)
+                {
+                    throw new Exception("主键字段不支持更新");
+                }
+                if (!Ignore.IsNullOrEmptyCollection())
+                {
+                    return node;
+                }
+                string paramsName = "";
                 if (_eTranslator == TranslatorEnum.Update)
                 {
+                    paramsName = $"{item.Member.Name}{AutoIncrementId.ToString()}";
                     UpdateColumnList.Add($"{item.Member.Name}=@{paramsName}");
                 }
                 else if (_eTranslator == TranslatorEnum.Where)
                 {
-                    WhereColumnList.Add($"{item.Member.Name}=@{paramsName}");
+                    paramsName = $"{item.Member.Name}_W{AutoIncrementId.ToString()}";
+                    WhereStrBuilder.Append($"{item.Member.Name}=@{paramsName}");
                 }
                 Parameters.Add($"{paramsName}", item.ToString().Split('=')[1].Trim());
                 AutoIncrementId++;
@@ -249,5 +303,10 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
             return node;
         }
 
+
+        protected override Expression VisitUnary(UnaryExpression node)
+        {
+            throw new NotImplementedException($"TOP ORM 不支持一元表达式{node.ToString()}");
+        }
     }
 }

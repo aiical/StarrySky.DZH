@@ -50,11 +50,11 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
             return result;
         }
 
-        public static List<string> GetWhereColumn(Expression expr, DynamicParameters parameters)
+        public static string GetWhereString(Expression expr, DynamicParameters parameters)
         {
             var vistor = new ExpressionVisitorImpl(TranslatorEnum.Where);
             vistor.Visit(expr);
-            var result = vistor.WhereColumnList;
+            var result = vistor.WhereStrBuilder.ToString();
             parameters.AddDynamicParams(vistor.Parameters);
             return result;
         }

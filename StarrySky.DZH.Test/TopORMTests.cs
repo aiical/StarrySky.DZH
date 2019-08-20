@@ -58,7 +58,7 @@ namespace StarrySky.DZH.TopORM.Tests
             //var res=sqlORM.UpdateCustom(p => p.DRowStatus == 1).ExcuteNonQuery();
             //sqlORM.UpdateCustom(p => p.DRowStatus == 2 && p.DCreateUser == "dzh" && p.DUpdateTime == model.DUpdateTime).ExcuteNonQuery();
             #endregion
-
+            var res=sqlORM.UpdateCustom(p => p.DAddress == "测试1").Where(p=>p.DRowStatus==1&&p.DSex!=21).ExcuteNonQuery();
 
 
 
@@ -69,18 +69,28 @@ namespace StarrySky.DZH.TopORM.Tests
         [TestMethod()]
         public void ToSelectTest()
         {
-            #region 测试通过
-            var model1 = sqlORM.Select(t => t.DId);  //MemberExpression
-            //var model2 = sqlORM.Select(t => t);  //ParameterExpression
-            //var model3 = sqlORM.Select(t => new { t.DId, t.DName }); //NewExpression
-            #endregion
+            try
+            {
+                #region 测试通过
+                //var model1 = sqlORM.Select(t => t.DId);  //MemberExpression
+                //var model2 = sqlORM.Select(t => t);  //ParameterExpression
+                //var model3 = sqlORM.Select(t => new { t.DId, t.DName }); //NewExpression
+                //var model5 = sqlORM.Where(t => t.DId == 1 && t.DSex == 22).Select(t => t.DId);
+                //var model4 = sqlORM.Where(t => t.DId == 1 || t.DSex == 22).Select(t => t);
+                //var model11 = sqlORM.Where(t => t.DId == 1 && (t.DRowStatus == 2 || t.DSex == 22)).Select(t => t);
+                //var model12 = sqlORM.Where(t => t.DId == 1 || (t.DRowStatus == 2 && t.DSex == 22)).Select(t => t);
+                #endregion
 
-            var model5 = sqlORM.Where(t => t.DId == 1 && t.DSex == 22).Select(t => t.DId);
-            var model4 = sqlORM.Where(t => t.DId == 1 || t.DSex == 22).Select(t => t.DId);
 
-            //var model6 = sqlORM.Where(t => t.DName.Substring(0, 2) == "aa").Select(t => t.DId);
-            //var model7 = sqlORM.Where(t => t.DName.Contains("aa")).Select(t => t.DId);
-            var model10 = sqlORM.Where(t => t.DId == 1 && (t.DRowStatus == 2 || t.DSex == 22) && !(t.DRowStatus == 3)).Select(t => t.DId);
+                //var model6 = sqlORM.Where(t => t.DName.Substring(0, 2) == "aa").Select(t => t.DId);
+                //var model7 = sqlORM.Where(t => t.DName.Contains("aa")).Select(t => t.DId);
+                //var model10 = sqlORM.Where(t => t.DId == 1 && (t.DRowStatus == 2 || t.DSex == 22) && !(t.DRowStatus == 3)).Select(t => t.DId); //不支持一元表达式
+
+                var model13 = sqlORM.Where(t => t.DId == 1 && (t.DRowStatus == 2 || t.DSex == 22) && (t.DRowStatus != 3)).Select(t => t.DId);
+            }
+            catch (Exception ex) {
+
+            }
 
         }
 

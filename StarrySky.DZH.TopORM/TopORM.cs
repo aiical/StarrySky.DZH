@@ -18,7 +18,7 @@ namespace StarrySky.DZH.TopORM
         private DBOperateStatusEnum operateStatus = DBOperateStatusEnum.Default;
         private List<string> selectColumn = null;
         private List<string> updateColumn = null;
-        private List<string> whereColumn = null;
+        private string whereString = null;
         //声明动态参数
         private DynamicParameters updateParameters = null;
         private DynamicParameters whereParameters = null;
@@ -27,7 +27,7 @@ namespace StarrySky.DZH.TopORM
         {
             selectColumn = new List<string>();
             updateColumn = new List<string>();
-            whereColumn = new List<string>();
+            whereString = "";
             updateParameters = new DynamicParameters();
             whereParameters = new DynamicParameters();
         }
@@ -71,6 +71,7 @@ namespace StarrySky.DZH.TopORM
         public TopORM<T> UpdateCustom<V>(Expression<Func<T, V>> exp)
         {
             operateStatus = DBOperateStatusEnum.Edit;
+            updateParameters = new DynamicParameters();
             updateColumn = ExpressionTranslator.GetUpdateColumn(exp, updateParameters);
             return this;
         }
@@ -91,9 +92,9 @@ namespace StarrySky.DZH.TopORM
         {
             Type type = typeof(T);
             var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
-            string selectField = selectColumn == null ? "*" : string.Join(",", selectColumn);
-            string whereField = whereColumn == null ? "" : string.Join("and", whereColumn);
-            return $@"SELECT {selectField}  FROM `{tableInfo.TableName}` WHERE 1=1 {whereField}";
+            string selectField = selectColumn == null ? "1=1" : string.Join(",", selectColumn);
+            string whereField = whereString == null ? "" : whereString;
+            return $@"SELECT {selectField}  FROM `{tableInfo.TableName}` WHERE {whereField}";
         }
 
         #endregion
@@ -140,19 +141,24 @@ namespace StarrySky.DZH.TopORM
         /// <returns></returns>
         public TopORM<T> Where(Expression<Func<T, bool>> where)
         {
-            whereColumn = ExpressionTranslator.GetWhereColumn(where, whereParameters);
+            whereParameters = new DynamicParameters();
+            whereString = ExpressionTranslator.GetWhereString(where, whereParameters);
             return this;
         }
 
-        public int ExcuteNonQuery()
+        public Tuple<int, string> ExcuteNonQuery()
         {
             if (operateStatus != DBOperateStatusEnum.Edit)
             {
                 throw new NotSupportedException("不支持");
             }
+            if (updateColumn == null || !updateColumn.Any())
+            {
+                return new Tuple<int, string>(0, "没有可更新列(请检查字段是否有IgnoreField特性)");
+            }
             var parameters = updateParameters;
             parameters.AddDynamicParams(whereParameters);
-            return DapperHelper.Execute("dzhMySQL", GetUpdateSql(), parameters);
+            return new Tuple<int, string>(DapperHelper.Execute("dzhMySQL", GetUpdateSql(), parameters), "");
         }
 
         private string GetUpdateSql()
@@ -164,8 +170,8 @@ namespace StarrySky.DZH.TopORM
             Type type = typeof(T);
             var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
             string updateField = string.Join(",", updateColumn);
-            string whereField = whereColumn == null ? "" : $"and 1=1";
-            return $@"UPDATE `{tableInfo.TableName}` SET {updateField} WHERE 1=1 {whereField}";
+            string whereField = whereString == null ? "" : whereString;
+            return $@"UPDATE `{tableInfo.TableName}` SET {updateField} WHERE 1=1 AND {whereField}";
         }
     }
 }
