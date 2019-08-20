@@ -25,11 +25,6 @@ namespace StarrySky.DZH.TopORM.Common
         /// <summary>
         /// 删除
         /// </summary>
-        Delete,
-        /// <summary>
-        /// 无效
-        /// </summary>
-        Invalid,
-
+        Delete
     }
 }

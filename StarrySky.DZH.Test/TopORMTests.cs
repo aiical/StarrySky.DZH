@@ -99,11 +99,5 @@ namespace StarrySky.DZH.TopORM.Tests
         {
             sqlORM.DeleteById(4);
         }
-
-        [TestMethod()]
-        public void InvalidTest()
-        {
-            sqlORM.Invalid(p => p.DId == 3);
-        }
     }
 }

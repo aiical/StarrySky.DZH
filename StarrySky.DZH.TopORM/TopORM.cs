@@ -117,23 +117,6 @@ namespace StarrySky.DZH.TopORM
         }
         #endregion
 
-        #region invalid
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public bool Invalid(Expression<Func<T, bool>> predicate)
-        {
-            operateStatus = DBOperateStatusEnum.Invalid;
-            PropertyInfo primaryProp;
-            var sql = SqlBuilder.ToDeleteSql(default(T), out primaryProp);
-            //KeyValuePair<string, int> keyVal = new KeyValuePair<string, int>(primaryProp.Name, id);
-            var result = DapperHelper.Execute("dzhMySQL", sql, null);
-            return result > 1;
-        }
-        #endregion
-
         /// <summary>
         /// 过滤条件
         /// </summary>
