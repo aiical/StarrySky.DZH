@@ -41,17 +41,17 @@ namespace StarrySky.DZH.TopORM
         /// <returns></returns>
         public int AddEntityShowId(T model)
         {
-            PropertyInfo primaryProp;
+            PropConstruction primaryProp;
             var sql = SqlBuilder.ToInsertSql(model, out primaryProp);
             var id = DapperHelper.InsertReturnId("dzhMySQL", sql, model);
             var type = typeof(T);
-            type.GetProperty(primaryProp.Name).SetValue(model, id);
+            type.GetProperty(primaryProp.PropName).SetValue(model, id);
             return id;
         }
 
         public bool AddEntity(T model)
         {
-            PropertyInfo primaryProp;
+            PropConstruction primaryProp;
             var sql = SqlBuilder.ToInsertSql(model, out primaryProp);
             var id = DapperHelper.Execute("dzhMySQL", sql, model);
             return id > 0;
@@ -109,8 +109,7 @@ namespace StarrySky.DZH.TopORM
         [Obsolete("数据无价，硬删除，谨慎使用!")]
         public bool DeleteById(int id)
         {
-            PropertyInfo primaryProp;
-            var sql = SqlBuilder.ToDeleteSql(default(T), out primaryProp);
+            var sql = SqlBuilder.ToDeleteSql(default(T));
             //KeyValuePair<string, int> keyVal = new KeyValuePair<string, int>(primaryProp.Name, id);
             var result = DapperHelper.Execute("dzhMySQL", sql, new { Key = id });
             return result > 1;
