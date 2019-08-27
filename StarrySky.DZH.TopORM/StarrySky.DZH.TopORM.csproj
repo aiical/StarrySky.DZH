@@ -67,11 +67,13 @@
   <ItemGroup>
     <Compile Include="Common\DBConfig.cs" />
     <Compile Include="Common\DBTypeEnum.cs" />
-    <Compile Include="Common\GenericPropMapping.cs" />
+    <Compile Include="Common\GenericMappingProvider.cs" />
     <Compile Include="Common\TranslatorEnum.cs" />
     <Compile Include="CustomAttribute\ORMAttributes.cs" />
     <Compile Include="DapperHelper.cs" />
+    <Compile Include="Entity\AnimalEntity.cs" />
     <Compile Include="Entity\PersonEntity.cs" />
+    <Compile Include="Entity\DemoEntity.cs" />
     <Compile Include="ExpressionLib\ExpressionExtends.cs" />
     <Compile Include="ExpressionLib\ExpressionProvider.cs" />
     <Compile Include="ExpressionLib\ExpressionTranslator.cs" />

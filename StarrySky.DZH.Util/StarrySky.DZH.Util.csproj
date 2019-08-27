@@ -119,6 +119,7 @@
     <Compile Include="CustomAttribute\RangeAttribute.cs" />
     <Compile Include="CustomAttribute\Validate\AttributeValidateHelper.cs" />
     <Compile Include="EnumUtil\EnumReflactProvider.cs" />
+    <Compile Include="EnumUtil\MoneyBillEnums.cs" />
     <Compile Include="Extensions\ConvertHelperExtend.cs" />
     <Compile Include="DataConvert\PinYinConvertHelper.cs" />
     <Compile Include="EnumUtil\EnumHelper.cs" />

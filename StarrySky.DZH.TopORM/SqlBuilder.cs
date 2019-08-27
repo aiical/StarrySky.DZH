@@ -35,24 +35,23 @@ namespace StarrySky.DZH.TopORM
             prop = null;
             StringBuilder sbInsertSql = new StringBuilder();
             Type type = typeof(T);
-            var props = GenericPropMapping.GetProp(obj);
-            if (props.IsNullOrEmptyCollection()) {
+            var classConstruction = GenericMappingProvider.GetClassConstruction(obj);
+            if (classConstruction.Properities.IsNullOrEmptyCollection()) {
                 return "";
             }
             List<string> columnName = new List<string>();
-            foreach (var p in props)
+            foreach (var p in classConstruction.Properities)
             {
-                if (p.AttrList.Contains(typeof(PrimaryKeyAttribute).Name))
+                if (p.AttrNameList.Contains(typeof(PrimaryKeyAttribute).Name))
                 {
                     prop = p;
                 }
-                else if(!p.AttrList.Contains(typeof(IgnoreFieldAttribute).Name))
+                else if(!p.AttrNameList.Contains(typeof(IgnoreFieldAttribute).Name))
                 {
                     columnName.Add(p.PropName);
                 }
             }
-            var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
-
+            var tableInfo = (TableInfoAttribute)classConstruction.AttributeList.FirstOrDefault(x => x.TypeId.ToString().Contains(nameof(TableInfoAttribute)));
             sbInsertSql.AppendFormat($"INSERT INTO {tableInfo.TableName} ({string.Join(",", columnName)}) VALUES  ({string.Join(",", columnName.Select(p => $"@{p}"))})");
 
             return sbInsertSql.ToString();
@@ -69,21 +68,21 @@ namespace StarrySky.DZH.TopORM
             PropConstruction keyProp = null;
             StringBuilder sbSql = new StringBuilder();
             Type type = typeof(T);
-            var props = GenericPropMapping.GetProp(obj);
-            if (props.IsNullOrEmptyCollection())
+            var classConstruction = GenericMappingProvider.GetClassConstruction(obj);
+            if (classConstruction.Properities.IsNullOrEmptyCollection())
             {
                 return "";
             }
             List<string> setcolumn = new List<string>();
-            foreach (var p in props)
+            foreach (var p in classConstruction.Properities)
             {
                 
-                if (p.AttrList.Contains(typeof(PrimaryKeyAttribute).Name))
+                if (p.AttrNameList.Contains(typeof(PrimaryKeyAttribute).Name))
                 {
                     keyProp = p;
                     continue;
                 }
-                if (p.AttrList.Contains(typeof(IgnoreFieldAttribute).Name))
+                if (p.AttrNameList.Contains(typeof(IgnoreFieldAttribute).Name))
                 {
                     continue;
                 }
@@ -92,7 +91,7 @@ namespace StarrySky.DZH.TopORM
                     setcolumn.Add($"{p.PropName}=@{p.PropName}");
                 }
             }
-            var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
+            var tableInfo = (TableInfoAttribute)classConstruction.AttributeList.FirstOrDefault(x => x.TypeId.ToString().Contains(nameof(TableInfoAttribute)));
             if (keyProp == null||(long)keyProp.PropInfo.GetValue(obj)==0L || setcolumn.IsNullOrEmptyCollection())
             {
                 return "";
@@ -101,19 +100,19 @@ namespace StarrySky.DZH.TopORM
             return sbSql.ToString();
         }
 
-        public static string ToDeleteSql<T>(T obj)
+        public static string ToDeleteSql<T>(T obj) where T:class
         {
             var type = typeof(T);
-            var tableInfo = (TableInfoAttribute)(type.GetCustomAttributes(typeof(TableInfoAttribute), false).FirstOrDefault());
-            var props = GenericPropMapping.GetProp(obj);
-            if (props.IsNullOrEmptyCollection())
+            var classConstruction = GenericMappingProvider.GetClassConstruction(obj);
+            if (classConstruction.Properities.IsNullOrEmptyCollection())
             {
                 return "";
             }
+            var tableInfo = (TableInfoAttribute)classConstruction.AttributeList.FirstOrDefault(x => x.TypeId.ToString().Contains(nameof(TableInfoAttribute)));
             string primaryKey = "";
-            foreach (var p in props)
+            foreach (var p in classConstruction.Properities)
             {
-                if (p.AttrList.Contains(typeof(PrimaryKeyAttribute).Name))
+                if (p.AttrNameList.Contains(nameof(PrimaryKeyAttribute)))
                 {
                     primaryKey = p.PropName;
                     break;

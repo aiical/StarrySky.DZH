@@ -53,6 +53,7 @@
     <Compile Include="ChinaAreaCrawerTests.cs" />
     <Compile Include="Common\GenericPropMappingTests.cs" />
     <Compile Include="DataConvert\UnitTest1.cs" />
+    <Compile Include="EnumUtil\EnumReflactProviderTests.cs" />
     <Compile Include="TopORMTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

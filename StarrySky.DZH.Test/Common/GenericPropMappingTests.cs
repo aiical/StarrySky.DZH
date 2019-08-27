@@ -16,7 +16,7 @@ namespace StarrySky.DZH.TopORM.Common.Tests
         public void GetPropTest()
         {
             DemoEntity demo = new DemoEntity();
-            var s=GenericPropMapping.GetProp<DemoEntity>(demo);
+            var s=GenericMappingProvider.GetClassConstruction<DemoEntity>(demo);
         }
     }
 }

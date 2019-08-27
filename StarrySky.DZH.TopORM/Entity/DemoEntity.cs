@@ -11,27 +11,27 @@ namespace StarrySky.DZH.TopORM.Entity
     /// <summary>
     /// 不存表的字段加Ignore（不存or表没有） 否则报错MySql.Data.MySqlClient.MySqlException:“Unknown column 'xxx' in 'field list'”
     /// </summary>
-    [TableInfo("Person", DBTypeEnum.MySQL)]
-    public class PersonEntity
+    [TableInfo("Demo", DBTypeEnum.MySQL)]
+    public class DemoEntity
     {
         [PrimaryKey]
-        public long PId { get; set; }
+        public long DId { get; set; }
 
-        public string PName { get; set; }
+        public string DName { get; set; }
 
-        public int PSex { get; set; }
+        public int DSex { get; set; }
 
-        public int PRowStatus { get; set; }
+        public int DRowStatus { get; set; }
 
-        public DateTime PCreateTime { get; set; }
+        public DateTime DCreateTime { get; set; }
 
-        public string PCreateUser { get; set; }
+        public string DCreateUser { get; set; }
 
-        public DateTime PUpdateTime { get; set; }
+        public DateTime DUpdateTime { get; set; }
 
-        public string PUpdateUser { get; set; }
+        public string DUpdateUser { get; set; }
 
         [IgnoreField]
-        public string PAddress { get; set; }
+        public string DAddress { get; set; }
     }
 }

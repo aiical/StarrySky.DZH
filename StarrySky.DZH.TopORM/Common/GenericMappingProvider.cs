@@ -10,15 +10,21 @@ namespace StarrySky.DZH.TopORM.Common
     /// <summary>
     /// 映射泛型属性到内存
     /// </summary>
-    public class GenericPropMapping
+    public class GenericMappingProvider
     {
-        public static Dictionary<string, List<PropConstruction>> GenericClassDic = new Dictionary<string, List<PropConstruction>>();
+        public static Dictionary<string, ClassConstruction> GenericClassDic = new Dictionary<string, ClassConstruction>();
 
         public static readonly object Locker = new object();
-
-        public static List<PropConstruction> GetProp<T>(T classModel)
+        /// <summary>
+        /// 获取泛型属性
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classModel"></param>
+        /// <returns></returns>
+        public static ClassConstruction GetClassConstruction<T>(T classModel)
         {
-            List<PropConstruction> result = new List<PropConstruction>();
+
+            ClassConstruction result = new ClassConstruction();
             Type type = typeof(T);
             var props = type.GetProperties();
             string fullName = type.FullName;
@@ -28,17 +34,18 @@ namespace StarrySky.DZH.TopORM.Common
                 {
                     if (GenericClassDic == null || !GenericClassDic.Any() || !GenericClassDic.Keys.Contains(fullName))
                     {
+                        result.AttributeList = type.GetCustomAttributes().ToList();
                         if (props != null && props.Any())
                         {
                             foreach (var p in props)
                             {
-                                result.Add(new PropConstruction()
+                                result.Properities.Add(new PropConstruction()
                                 {
-                                    PropInfo=p,
+                                    PropInfo = p,
                                     PropName = p.Name,
-                                    TypeName =p.PropertyType.Name,
-                                    TypeFullName=p.PropertyType.FullName,
-                                    AttrList=p.CustomAttributes.Select(x=>x.AttributeType.Name).ToList()
+                                    TypeName = p.PropertyType.Name,
+                                    TypeFullName = p.PropertyType.FullName,
+                                    AttrNameList = p.CustomAttributes.Select(x => x.AttributeType.Name).ToList()
                                 });
                             }
                         }
@@ -53,7 +60,24 @@ namespace StarrySky.DZH.TopORM.Common
             return result;
         }
     }
+    /// <summary>
+    /// 泛型类结构模型
+    /// </summary>
+    public class ClassConstruction
+    {
+        /// <summary>
+        /// 类的特性描述列表
+        /// </summary>
+        public List<Attribute> AttributeList { get; set; } = new List<Attribute>();
+        /// <summary>
+        /// 所有属性集合
+        /// </summary>
+        public List<PropConstruction> Properities { get; set; } = new List<PropConstruction>();
 
+    }
+    /// <summary>
+    /// 属性结构模型
+    /// </summary>
     public class PropConstruction
     {
         /// <summary>
@@ -73,8 +97,8 @@ namespace StarrySky.DZH.TopORM.Common
         /// </summary>
         public string TypeFullName { get; set; }
         /// <summary>
-        /// 特性描述列表
+        /// 属性的特性描述列表
         /// </summary>
-        public List<string> AttrList { get; set; } = new List<string>();
+        public List<string> AttrNameList { get; set; } = new List<string>();
     }
 }
