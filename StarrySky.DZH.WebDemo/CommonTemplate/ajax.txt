@@ -32,7 +32,7 @@ function putUser() {
        $.ajax({
             type: "get",
             url: "http://localhost:6303/api/POPSupplierAccount/BillDetailExportExcel",
-            data:'{
+            data:{
   "BeginTime": "2019-09-12T09:51:58.449Z",
   "EndTime": "2019-09-12T09:51:58.449Z",
   "OrderSerialId": "string",
@@ -47,7 +47,7 @@ function putUser() {
   "Version": "string",
   "UIDevice": "string",
   "SceneId": 0
-}',
+},
             dataType: "json",
             success:function(result){
                 alert("success");
