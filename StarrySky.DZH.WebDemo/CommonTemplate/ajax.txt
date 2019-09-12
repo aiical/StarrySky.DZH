@@ -26,3 +26,36 @@ function putUser() {
             }
         });
     }
+
+
+	function GetUU() {
+       $.ajax({
+            type: "get",
+            url: "http://localhost:6303/api/POPSupplierAccount/BillDetailExportExcel",
+            data:'{
+  "BeginTime": "2019-09-12T09:51:58.449Z",
+  "EndTime": "2019-09-12T09:51:58.449Z",
+  "OrderSerialId": "string",
+  "Status": 0,
+  "PageIndex": 0,
+  "PageSize": 0,
+  "UserName": "string",
+  "PostKey": "string",
+  "Secretkey": "string",
+  "TokenKey": "string",
+  "ProjectCode": 0,
+  "Version": "string",
+  "UIDevice": "string",
+  "SceneId": 0
+}',
+            dataType: "json",
+            success:function(result){
+                alert("success");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            	alert("Status:" + XMLHttpRequest.status + "..readyState:" + XMLHttpRequest.readyState + "..textStatus:" + textStatus + "..ex:" + errorThrown);
+            }
+        });
+    }
+
+	
