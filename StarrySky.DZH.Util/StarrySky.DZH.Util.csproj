@@ -116,6 +116,7 @@
     <Compile Include="Common\Mail.cs" />
     <Compile Include="Common\ObjectHelper.cs" />
     <Compile Include="Common\RandomStringHelper.cs" />
+    <Compile Include="Common\RedisSwitch.cs" />
     <Compile Include="CustomAttribute\RangeAttribute.cs" />
     <Compile Include="CustomAttribute\Validate\AttributeValidateHelper.cs" />
     <Compile Include="EnumUtil\EnumReflactProvider.cs" />
