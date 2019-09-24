@@ -10,6 +10,7 @@ namespace StarrySky.DZH.Util.Extensions
     {
         public static double NextRandom(this Random r, double min, double max)
         {
+            // 随机种子 降低伪随机的概率，new Random(1).Next(0,100)出来的始终是24
             if (r == null) {
                 r = new Random(DateTime.Now.Millisecond); //亦可Guid.NewGuid().GetHashCode()做种子
             }
