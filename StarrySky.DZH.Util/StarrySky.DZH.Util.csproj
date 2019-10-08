@@ -110,6 +110,7 @@
     <Compile Include="CheckCode\CheckCodeHelper.cs" />
     <Compile Include="ChinaAreaCrawer.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Common\DateTimeHelper.cs" />
     <Compile Include="Common\DLLConfigHelper.cs" />
     <Compile Include="Common\DeepCloneHelper.cs" />
     <Compile Include="Common\IPAddressHelper.cs" />
