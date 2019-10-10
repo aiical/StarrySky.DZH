@@ -73,5 +73,43 @@ namespace StarrySky.DZH.Util.Extensions
             }
         }
 
+
+        /// <summary>
+        /// 每月第一天
+        /// </summary>
+        /// <returns></returns>
+
+        public static DateTime FirstDayOfThisMonth()
+        {
+            return Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-01"));
+        }
+        /// <summary>
+        /// 每月最后一天
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime LastDayOfThisMonth()
+        {
+            return Convert.ToDateTime(DateTime.Now.AddMonths(1).ToString("yyyy-MM-01")).AddDays(-1);
+        }
+
+        /// <summary>
+        /// 取得上个月第一天
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime FirstDayOfPreviousMonth()
+        {
+            return DateTime.Now.AddMonths(-1).AddDays(1 - DateTime.Now.AddMonths(-1).Day);
+        }
+
+
+        /// <summary>
+        /// 取得上个月的最后一天
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime LastDayOfPrdviousMonth()
+        {
+            return DateTime.Parse(DateTime.Now.ToString("yyyy-MM-01")).AddDays(-1);
+        }
+
     }
 }
