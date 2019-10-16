@@ -16,6 +16,26 @@ namespace StarrySky.DZH.Util.Common
     {
         #region HttpWebRequest方式
 
+        public static string GetResponseByPost(string url, string param, string contentType = "application/json") {
+            return GetHttpResponse(url,"Post",param,null,contentType);
+        }
+
+        public static string GetResponseByGet(string url, string param, string contentType = "application/json")
+        {
+            return GetHttpResponse(url, "Get", param, null, contentType);
+        }
+
+        /// <summary>
+        /// Post提交请求，返回XML格式
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="param"></param>
+        public static string GetXmlByPost(string url, string param)
+        {
+            string contentType = "text/xml";
+            return GetHttpResponse(url, "Post", param, null, contentType);
+        }
+
         /// <summary>
         /// Post提交请求，默认返回Json格式
         /// </summary>
@@ -23,15 +43,27 @@ namespace StarrySky.DZH.Util.Common
         /// <param name="param"></param>
         /// <param name="contextType"></param>
         /// <returns></returns>
-        public static string GetResponseByPost(string url, string param, string contentType = "application/json")
+        private static string GetHttpResponse(string url, string method, string param, Dictionary<string, string> headers=null,string contentType = "application/json")
         {
             var result = string.Empty;
             Stopwatch stopWatch = Stopwatch.StartNew();
             try
             {
                 HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
+                webRequest.Method = method;
+
+                #region 请求头处理
+                if (headers != null && headers.Any())
+                {
+                    foreach (var item in headers)
+                    {
+                        webRequest.Headers.Add(item.Key, item.Value);
+                    }
+
+                }
+                #endregion
+
                 var data = Encoding.UTF8.GetBytes(param);//Encoding.GetEncoding(encoding).GetBytes(parms);
-                webRequest.Method = "Post";
                 webRequest.ContentType = contentType;//application/x-www-form-urlencoded
                 webRequest.ContentLength = data.Length;
                 webRequest.Timeout = 5000;
@@ -44,10 +76,11 @@ namespace StarrySky.DZH.Util.Common
                 var responseStream = webResponse.GetResponseStream();
                 if (responseStream != null)
                 {
-                    StreamReader streamReader = new StreamReader(responseStream, Encoding.UTF8);
-                    //获取返回的信息
-                    result = streamReader.ReadToEnd();
-                    streamReader.Close();
+                    using (StreamReader streamReader = new StreamReader(responseStream, Encoding.UTF8))
+                    {
+                        //获取返回的信息
+                        result = streamReader.ReadToEnd();
+                    }
                     responseStream.Close();
                 }
             }
@@ -74,63 +107,6 @@ namespace StarrySky.DZH.Util.Common
             return result;
         }
 
-        /// <summary>
-        /// Post提交请求，返回XML格式
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="param"></param>
-        public static string GetXmlByPost(string url, string param)
-        {
-            string contentType = "text/xml";
-            return GetResponseByPost(url, param, contentType);
-        }
-
-        /// <summary>
-        /// Get方式提交请求
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="headers"></param>
-        /// <returns></returns>
-        public static string GetResponseByGet(string url, Dictionary<string, string> headers)
-        {
-            string result = string.Empty;
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.Timeout = 5000;
-                if (headers != null && headers.Any())
-                {
-                    foreach (var item in headers)
-                    {
-                        request.Headers.Add(item.Key, item.Value);
-                    }
-
-                }
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                Stream resStream = response.GetResponseStream();
-                Encoding encode = Encoding.UTF8; //Encoding.GetEncoding(encoding);
-                if (resStream != null)
-                {
-                    using (StreamReader readStream = new StreamReader(resStream, encode))
-                    {
-                        Char[] read = new Char[256];
-                        int count = readStream.Read(read, 0, 256);
-                        while (count > 0)
-                        {
-                            String str = new String(read, 0, count);
-                            result = result + str;
-                            count = readStream.Read(read, 0, 256);
-                        }
-                    }
-                    resStream.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            return result;
-        }
         #endregion
     }
 }
