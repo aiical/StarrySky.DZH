@@ -18,7 +18,6 @@ namespace StarrySky.DZH.Util.HttpUtil
    public  class CrawlerHttpUtil
     {
        
-
         public static readonly string JsonContentType = "application/json; charset=UTF-8";
         public static readonly string FormContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
