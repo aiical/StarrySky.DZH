@@ -23,7 +23,9 @@ namespace StarrySky.DZH.Util.HttpUtil
 
         public static readonly string DefaultAccept = "application/json, text/javascript, */*; q=0.01";
         public static readonly string SpecialAccept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+
         #region 此处模拟浏览器登录
+
         /// <summary>
         /// 模拟浏览器
         /// </summary>
@@ -373,74 +375,9 @@ namespace StarrySky.DZH.Util.HttpUtil
         }
         #endregion
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="url">目标url</param>
-        /// <param name="strPost">要发送的post字符串</param>
-        /// <param name="strContentType">要发送的post字符串  text/xml</param>
-        /// <returns>接收后返回值</returns>
-        public static string PostData(string url, string strPost, string strContentType = "text/plain")
-        {
-            string result = string.Empty;
-            //生成文件流
-            byte[] buffer = Encoding.UTF8.GetBytes(strPost);
-            //向流中写字符串
-            StreamWriter mywriter = null;
-            //根据url创建请求对象
-            HttpWebRequest objrequest = (HttpWebRequest)WebRequest.Create(url);
-            //设置发送方式
-            objrequest.Method = "POST";
-            //提交长度
-            objrequest.ContentLength = buffer.Length;
-            //发送内容格式
-            objrequest.ContentType = strContentType;
-            try
-            {
-                mywriter = new StreamWriter(objrequest.GetRequestStream());
-                mywriter.Write(strPost);
-            }
-            catch (Exception)
-            {
-                result = "发送文件流失败！";
-
-            }
-            finally
-            {
-                mywriter.Close();
-            }
-            //读取服务器返回信息
-            HttpWebResponse objresponse = (HttpWebResponse)objrequest.GetResponse();
-            using (StreamReader sr = new StreamReader(objresponse.GetResponseStream()))
-            {
-                result = sr.ReadToEnd();
-                sr.Close();
-            }
-            return result;
-        }
-
         #region 处理ResponseStream
         /// <summary>
-        /// 解析xml
-        /// </summary>
-        /// <param name="stm"></param>
-        /// <returns></returns>
-        public static string DecompressGzip(Stream stm)
-        {
-            string strHTML = "";
-
-            GZipStream gzip = new GZipStream(stm, CompressionMode.Decompress);//解压缩
-            using (StreamReader reader = new StreamReader(gzip, Encoding.GetEncoding("utf-8")))//中文编码处理
-            {
-                strHTML = reader.ReadToEnd();
-            }
-
-            return strHTML;
-        }
-
-        /// <summary>
-        /// 读取Response中的内容
+        /// 读取Response中的内容 支持gzip的解析
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
@@ -448,27 +385,34 @@ namespace StarrySky.DZH.Util.HttpUtil
         {
             try
             {
-                var resp_html = "";
+                var result = "";
                 if (response != null)
                 {
-                    Stream resp_stream = response.GetResponseStream();   //获取响应的字符串流  
-                    var resp_type = response.ContentEncoding;
-                    if (resp_type == "gzip")
+                    var respStream = response.GetResponseStream();   //获取响应的字符串流  
+                    if (respStream != null)
                     {
-                        resp_html = DecompressGzip(resp_stream);
+                        if (response.ContentEncoding?.ToLower().Contains("gzip") ?? false)
+                        {
+                            //如果已经压缩，进行解压缩
+                            GZipStream gzipStream = new GZipStream(respStream, CompressionMode.Decompress);
+                            using (StreamReader streamReader = new StreamReader(gzipStream, Encoding.UTF8))
+                            {
+                                result = streamReader.ReadToEnd();//获取返回的信息
+                            }
+                        }
+                        else
+                        {
+                            using (StreamReader streamReader = new StreamReader(respStream, Encoding.UTF8))
+                            {
+                                result = streamReader.ReadToEnd();//获取返回的信息
+                            }
+                        }
+                        respStream.Close();
                     }
-                    else
-                    {
-                        StreamReader resp_html_sr = new StreamReader(resp_stream); //创建一个stream读取流  
-                        resp_html = resp_html_sr.ReadToEnd();   //从头读到尾，放到字符串html  
-                    }
-                    resp_stream.Close();
                 }
-
-                return resp_html;
-
+                return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return "";
             }
