@@ -16,12 +16,25 @@ namespace StarrySky.DZH.Util.Common
     public class HttpUtilHelper
     {
         #region HttpWebRequest方式
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <param name="contentType"></param>
+        /// <param name="isUseGzip"></param>
+        /// <returns></returns>
         public static string GetResponseByPost(string url, string data, string contentType = "application/json", bool isUseGzip = false)
         {
             return GetHttpResponse(url, "Post", data, null, contentType, isUseGzip);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="contentType"></param>
+        /// <param name="isUseGzip"></param>
+        /// <returns></returns>
         public static string GetResponseByGet(string url, string contentType = "application/json", bool isUseGzip = false)
         {
             return GetHttpResponse(url, "Get", null, null, contentType, isUseGzip);
@@ -39,11 +52,14 @@ namespace StarrySky.DZH.Util.Common
         }
 
         /// <summary>
-        /// Post提交请求，默认返回Json格式
+        /// http请求，默认返回Json格式
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="param"></param>
-        /// <param name="contextType"></param>
+        /// <param name="method"></param>
+        /// <param name="postdata"></param>
+        /// <param name="headers"></param>
+        /// <param name="contentType"></param>
+        /// <param name="isUseGzip"></param>
         /// <returns></returns>
         private static string GetHttpResponse(string url, string method, string postdata, Dictionary<string, string> headers = null, string contentType = "application/json", bool isUseGzip = false)
         {
