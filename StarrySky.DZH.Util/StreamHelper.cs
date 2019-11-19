@@ -19,11 +19,19 @@ namespace StarrySky.DZH.Util
         /// <returns></returns>
         public static byte[] StreamToByte(this Stream stream)
         {
-            byte[] bytes = new byte[stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
-            //设置当前流的位置为流的开始
-            stream.Seek(0, SeekOrigin.Begin);
-            return bytes;
+            List<byte> bytes = new List<byte>();
+            int temp = stream.ReadByte();
+            while (temp != -1)
+            {
+                bytes.Add((byte)temp);
+                temp = stream.ReadByte();
+            }
+            return bytes.ToArray();
+            //byte[] bytes = new byte[stream.Length]; //这里可能报错， http响应流不支持读
+            //stream.Read(bytes, 0, bytes.Length);
+            ////设置当前流的位置为流的开始
+            //stream.Seek(0, SeekOrigin.Begin);
+            //return bytes;
 
         }
         /// <summary>
