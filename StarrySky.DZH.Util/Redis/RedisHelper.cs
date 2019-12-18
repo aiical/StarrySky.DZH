@@ -318,6 +318,30 @@ namespace StarrySky.DZH.Util.Redis
             }
         }
 
+
+        /// <summary>
+        /// redis锁升级版， 获取到false后还需要判断第二个值是否为1,
+        /// 1的为异常情况，此时锁判断不可用，需要业务自行逻辑验重
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="seconds"></param>
+        /// <returns></returns>
+        public static (bool, int) RedisSetNxUpgrade<T>(string key, T value, int seconds)
+        {
+            try
+            {
+                return (_db.StringSet(key, JsonConvert.SerializeObject(value), TimeSpan.FromSeconds(seconds),
+                    When.NotExists), 0);
+            }
+            catch (Exception ex)
+            {
+                //RedisConnectionHelper.RemoveConnectionMultiplexer(_groupName);
+                return (false, 1);
+            }
+        }
+
         #endregion
 
         #region HashTable
