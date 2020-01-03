@@ -38,12 +38,13 @@ namespace StarrySky.DZH.Util.Common
         }
         /// <summary>
         /// 是否读缓存 true 读缓存 false 不读缓存
+        /// 此方法不能静态
         /// </summary> 
         public bool IsReadCache
         {
             get
             {
-                //1不读缓存
+                //1不读缓存 读取外部配置
                 return 0 != 1;
             }
         }
