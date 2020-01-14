@@ -62,37 +62,22 @@ namespace StarrySky.DZH.Util.Excel
                     {
                         var cell = row.GetCell(j);
                         if (cell == null) break;
-                        cell.SetCellType(CellType.String);
+                        //fix excel中日期格式会变成numeric,直接转string获取的是double类型的字串问题
+                        if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
+                        {
+                            var cellvalue = cell.DateCellValue.ToString("yyyy-MM-dd HH:mm:ss");
+                            typeof(T).GetProperty(fields[j])?.SetValue(t, cellvalue, null);
+                            continue;
+                        }
+                        else if (cell.CellType != CellType.String)
+                        {
+                            cell.SetCellType(CellType.String);
+                        }
                         if (cell.StringCellValue != null)
                         {
-                            //stuUser.setPhone(row.getCell(0).getStringCellValue());
                             var cellValue = cell.StringCellValue.Trim();
                             typeof(T).GetProperty(fields[j])?.SetValue(t, cellValue, null);
                         }
-                        //string cellValue = null;
-                        //switch (cell.CellType)
-                        //{
-                        //    case CellType.String: //文本
-                        //        cellValue = cell.StringCellValue.Trim();
-                        //        break;
-                        //    case CellType.Numeric: //数值
-                        //        cellValue = cell.NumericCellValue.ToString().Trim();
-                        //        break;
-                        //    case CellType.Boolean: //bool
-                        //        cellValue = cell.BooleanCellValue.ToString().Trim();
-                        //        break;
-                        //    case CellType.Blank: //空白
-                        //        cellValue = "";
-                        //        break;
-                        //    default:
-                        //        cellValue = "ERROR";
-                        //        break;
-                        //}
-                        //if (cellValue == "ERROR")
-                        //{
-                        //    return null;
-                        //}
-                        //typeof(T).GetProperty(firstRow.GetCell(j).StringCellValue).SetValue(t, cellValue, null);
                     }
                     list.Add(t);
                 }
