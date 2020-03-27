@@ -139,6 +139,7 @@
     <Compile Include="Excel\NpoiExcelHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QRCode\QRCodeHelper.cs" />
+    <Compile Include="QRCode\QRCodeHelper_NetCore.cs" />
     <Compile Include="Redis\RedisHelper.cs" />
     <Compile Include="Redis\RedisInstance.cs" />
     <Compile Include="StreamHelper.cs" />
