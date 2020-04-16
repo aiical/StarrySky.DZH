@@ -98,6 +98,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TCBase.Distributed.TurboMQ">
+      <HintPath>appusing\TCBase.Distributed.TurboMQ.dll</HintPath>
+    </Reference>
     <Reference Include="zxing, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
       <HintPath>..\packages\ZXing.Net.0.16.4\lib\net461\zxing.dll</HintPath>
     </Reference>
@@ -144,6 +147,14 @@
     <Compile Include="Redis\RedisHelper.cs" />
     <Compile Include="Redis\RedisInstance.cs" />
     <Compile Include="StreamHelper.cs" />
+    <Compile Include="TurboMQ\ITruboMQRegister.cs" />
+    <Compile Include="TurboMQ\MqSendModel.cs" />
+    <Compile Include="TurboMQ\PollMQRegister.cs" />
+    <Compile Include="TurboMQ\SurpriseMQRegister.cs" />
+    <Compile Include="TurboMQ\TestDemo.cs" />
+    <Compile Include="TurboMQ\TurboMQConfig.cs" />
+    <Compile Include="TurboMQ\TurboMQConsumer.cs" />
+    <Compile Include="TurboMQ\TurboMQProvider.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

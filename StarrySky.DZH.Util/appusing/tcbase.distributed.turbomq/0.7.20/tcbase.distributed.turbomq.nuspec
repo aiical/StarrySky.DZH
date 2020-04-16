@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>TCBase.Distributed.TurboMQ</id>
+    <version>0.7.20</version>
+    <authors>平台框架开发组</authors>
+    <owners>平台框架开发组</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://bps.17usoft.com/display/CSZJZ/TCBase.Distributed.TurboMQ</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288859</iconUrl>
+    <description>提供MQ服务
+
+      When using NuGet 3.x this package requires at least version 3.4.</description>
+    <releaseNotes>取消checkNameserver后抛异常</releaseNotes>
+    <tags>.netcore TurboMQ</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Newtonsoft.Json" version="9.0.1" exclude="Build,Analyzers" />
+        <dependency id="Portable.BouncyCastle" version="1.8.1.4" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks.Dataflow" version="4.8.0" exclude="Build,Analyzers" />
+        <dependency id="TCBase.Skynet.Logger" version="2.3.6" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Newtonsoft.Json" version="9.0.1" exclude="Build,Analyzers" />
+        <dependency id="Portable.BouncyCastle" version="1.8.1.4" exclude="Build,Analyzers" />
+        <dependency id="System.Threading.Tasks.Dataflow" version="4.8.0" exclude="Build,Analyzers" />
+        <dependency id="TCBase.Component.Logging" version="1.4.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
