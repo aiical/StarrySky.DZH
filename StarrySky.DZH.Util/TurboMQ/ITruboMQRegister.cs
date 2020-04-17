@@ -5,7 +5,7 @@ using System.Text;
 namespace SurpriseGamePoll.Common.TurboMQ
 {
     /// <summary>
-    /// 
+    /// 由业务实现
     /// </summary>
     public interface ITruboMQRegister
     {
@@ -18,11 +18,11 @@ namespace SurpriseGamePoll.Common.TurboMQ
         /// </summary>
         string Group { get; set; }
         /// <summary>
-        /// 消费逻辑实现方法
+        /// 要实现的消费逻辑 
         /// </summary>
         /// <param name="msgId"></param>
         /// <param name="msgbody"></param>
-        /// <param name="tag"></param>
+        /// <param name="tag">自行定义扩展，并实现对应的处理方法</param>
         void Consumer(string msgId,string msgbody, string tag);
 
     }

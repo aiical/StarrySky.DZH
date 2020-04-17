@@ -1,19 +1,15 @@
-﻿
-using StarrySky.DZH.Util.Extensions;
-using SurpriseGamePoll.Common;
+﻿using StarrySky.DZH.Util.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 
 
-namespace SurpriseGamePoll.Services.TurboMQ
+namespace SurpriseGamePoll.Services.TurboMQBusiness
 {
     public class TestDemo
     {
         public void TestTag(string msg)
         {
+            string myEnvironmentValue = Environment.GetEnvironmentVariable("test_qa", EnvironmentVariableTarget.Process);
+            //LogBuilder.Info($"Process{myEnvironmentValue??""}", "新版MQ", "myEnvironmentValue");
             var ip = "";
             try
             {

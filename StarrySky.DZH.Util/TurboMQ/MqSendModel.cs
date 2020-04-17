@@ -1,5 +1,4 @@
-﻿
-using StarrySky.DZH.Util.Extensions;
+﻿using StarrySky.DZH.Util.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Text;
 namespace SurpriseGamePoll.Common.TurboMQ
 {
     /// <summary>
-    /// 
+    /// 发送的mq消息DataTransferObject对象
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class MqSendModel<T>
@@ -22,7 +21,7 @@ namespace SurpriseGamePoll.Common.TurboMQ
         public T Msg { get; set; }
 
         /// <summary>
-        /// byte字节
+        /// 转化的byte字节
         /// </summary>
         public byte[] BTbody
         {

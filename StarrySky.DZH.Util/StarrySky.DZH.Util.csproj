@@ -149,9 +149,11 @@
     <Compile Include="StreamHelper.cs" />
     <Compile Include="TurboMQ\ITruboMQRegister.cs" />
     <Compile Include="TurboMQ\MqSendModel.cs" />
-    <Compile Include="TurboMQ\PollMQRegister.cs" />
-    <Compile Include="TurboMQ\SurpriseMQRegister.cs" />
-    <Compile Include="TurboMQ\TestDemo.cs" />
+    <Compile Include="TurboMQ\MQUnitTest\MQTest.cs" />
+    <Compile Include="TurboMQ\TurboMQBusiness\PollMQRegister.cs" />
+    <Compile Include="TurboMQ\TurboMQBusiness\SurpriseMQRegister.cs" />
+    <Compile Include="TurboMQ\TurboMQBusiness\TestDemo.cs" />
+    <Compile Include="TurboMQ\TurboMQBusiness\TestMQRegister.cs" />
     <Compile Include="TurboMQ\TurboMQConfig.cs" />
     <Compile Include="TurboMQ\TurboMQConsumer.cs" />
     <Compile Include="TurboMQ\TurboMQProvider.cs" />

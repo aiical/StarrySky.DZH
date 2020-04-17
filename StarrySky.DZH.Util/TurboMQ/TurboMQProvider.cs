@@ -85,7 +85,7 @@ namespace SurpriseGamePoll.Common.TurboMQ
             }
             finally
             {
-                //LogBuilder.Info($"{model?.PackJson()}", "SendMQMsg", model.Tag);
+                //LogBuilder.Info($"{ConfigRegister.Topic},{ConfigRegister.Group},{model?.PackJson()}", "SendMQMsg", model.Tag);
             }
         }
 

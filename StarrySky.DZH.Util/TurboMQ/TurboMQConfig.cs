@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TCBase.Distributed.TurboMQ.Client.Producer;
@@ -16,9 +17,9 @@ namespace SurpriseGamePoll.Common.TurboMQ
     {
         #region config
         /// <summary>
-        /// 
+        /// 线下"*****:9876";
         /// </summary>
-        public static string NameServer = "*****:9876";//ConfigCenterClient.Get(ProjectsEnum.SurpriseGame, "TurboMQ_NameServerAddr")
+        public static string NameServer = "*****:9876";
 
         /// <summary>
         /// The consume message batch maximum size

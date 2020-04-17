@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SurpriseGamePoll.Common.TurboMQ;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SurpriseGamePoll.Common.TurboMQ
+namespace SurpriseGamePoll.Services.TurboMQBusiness
 {
     /// <summary>
     /// gamebase主题mq注册
@@ -15,7 +16,7 @@ namespace SurpriseGamePoll.Common.TurboMQ
         {
             get
             {
-                return "****_topic_****";
+                return "qyxm_qyrjkf_topic_gamebase";
             }
             set { }
         }
@@ -24,7 +25,7 @@ namespace SurpriseGamePoll.Common.TurboMQ
         {
             get
             {
-                return "****_group_****";
+                return "qyxm_qyrjkf_group_gamebase";
             }
 
             set { }
@@ -48,6 +49,7 @@ namespace SurpriseGamePoll.Common.TurboMQ
         /// <param name="msgId"></param>
         /// <param name="msgbody"></param>
         /// <param name="tag"></param>
+        [Obsolete("此主题下的消费者禁止使用，因为game站开启了")]
         public void Consumer(string msgId, string msgbody, string tag)
         {
             switch (tag.ToLower())

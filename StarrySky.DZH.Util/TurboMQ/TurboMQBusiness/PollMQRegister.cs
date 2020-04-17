@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SurpriseGamePoll.Services.TurboMQ
+namespace SurpriseGamePoll.Services.TurboMQBusiness
 {
     /// <summary>
     /// poll主题mq注册
@@ -14,7 +14,7 @@ namespace SurpriseGamePoll.Services.TurboMQ
         {
             get
             {
-                return "****_topic_gamepoll";
+                return "qyxm_qyrjkf_topic_gamepoll";
             }
             set { }
         }
@@ -23,7 +23,7 @@ namespace SurpriseGamePoll.Services.TurboMQ
         {
             get
             {
-                return "****_group_gamepoll";
+                return "qyxm_qyrjkf_group_gamepoll";
             }
 
             set { }
@@ -35,6 +35,10 @@ namespace SurpriseGamePoll.Services.TurboMQ
         /// 测试用tags
         /// </summary>
         public const string Tag_Test = "tags_test";
+        /// <summary>
+        /// 任务中心
+        /// </summary>
+        public const string Tag_UpdateMission = "tags_updatemission";
 
         #endregion
 
@@ -51,7 +55,9 @@ namespace SurpriseGamePoll.Services.TurboMQ
                 case Tag_Test:
                     new TestDemo().TestTag(msgbody);
                     break;
-               
+                case Tag_UpdateMission:
+                    //new MissionCenterService().UpsetMissionRecordMQConsumer(msgbody);
+                    break;
             }
         }
     }
