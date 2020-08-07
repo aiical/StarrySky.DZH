@@ -55,13 +55,16 @@ namespace StarrySky.DZH.Util.Excel
                 //遍历每一行数据
                 for (int i = sheet.FirstRowNum + 1, len = sheet.LastRowNum + 1; i < len; i++)
                 {
-                    t = new T();
                     IRow row = sheet.GetRow(i);
-
+                    if (row == null || !row.Any())
+                    {
+                        break;
+                    }
+                    t = new T();
                     for (int j = 0, len2 = fields.Length; j < len2; j++)
                     {
                         var cell = row.GetCell(j);
-                        if (cell == null) break;
+                        if (cell == null) continue;
                         //fix excel中日期格式会变成numeric,直接转string获取的是double类型的字串问题
                         if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
                         {
