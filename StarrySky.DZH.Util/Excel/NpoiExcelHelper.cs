@@ -56,7 +56,7 @@ namespace StarrySky.DZH.Util.Excel
                 for (int i = sheet.FirstRowNum + 1, len = sheet.LastRowNum + 1; i < len; i++)
                 {
                     IRow row = sheet.GetRow(i);
-                    if (row == null || !row.Any())
+                    if (row == null || IsRowEmpty(row))
                     {
                         break;
                     }
@@ -93,6 +93,24 @@ namespace StarrySky.DZH.Util.Excel
 
         }
 
+        /// <summary>
+        /// 判断是否空行
+        /// </summary>
+        /// <param name="row">行</param>
+        /// <returns>true false</returns>
+        private static bool IsRowEmpty(IRow row)
+        {
+            for (int c = row.FirstCellNum; c < row.LastCellNum; c++)
+            {
+                var cell = row.GetCell(c);
+                if (cell != null && cell.CellType != CellType.Blank)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// 转list到execl
