@@ -139,7 +139,7 @@
     <Compile Include="Common\TypeConvert.cs" />
     <Compile Include="Common\ImgFileValidateHelper.cs" />
     <Compile Include="Encrypt\AESEncryptHelper.cs" />
-    <Compile Include="Encrypt\EncryptHelper.cs" />
+    <Compile Include="Encrypt\EncryptTools.cs" />
     <Compile Include="Excel\NpoiExcelHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QRCode\QRCodeHelper.cs" />
