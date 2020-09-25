@@ -20,6 +20,11 @@ namespace StarrySky.DZH.Util
         /// <returns></returns>
         public static byte[] StreamToByte(this Stream stream)
         {
+            if (stream is MemoryStream)
+            {
+                return (stream as MemoryStream).ToArray();
+            }
+
             List<byte> bytes = new List<byte>();
             int temp = stream.ReadByte();
             while (temp != -1)

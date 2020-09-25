@@ -121,6 +121,7 @@
     <Compile Include="Common\RandomStringHelper.cs" />
     <Compile Include="Common\RedisSwitch.cs" />
     <Compile Include="Common\UriHelper.cs" />
+    <Compile Include="CompressImageHelper.cs" />
     <Compile Include="CustomAttribute\RangeAttribute.cs" />
     <Compile Include="CustomAttribute\Validate\AttributeValidateHelper.cs" />
     <Compile Include="Encrypt\Sha256WithRSAHelper.cs" />
