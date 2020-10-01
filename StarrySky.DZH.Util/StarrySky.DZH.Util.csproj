@@ -127,9 +127,11 @@
     <Compile Include="Encrypt\Sha256WithRSAHelper.cs" />
     <Compile Include="EnumUtil\EnumReflactProvider.cs" />
     <Compile Include="EnumUtil\MoneyBillEnums.cs" />
+    <Compile Include="Extensions\CommonExtends.cs" />
     <Compile Include="Extensions\ConvertHelperExtend.cs" />
     <Compile Include="DataConvert\PinYinConvertHelper.cs" />
     <Compile Include="EnumUtil\EnumHelper.cs" />
+    <Compile Include="Extensions\CurrencyExtends.cs" />
     <Compile Include="Extensions\DateTimeExtend.cs" />
     <Compile Include="Extensions\RandomExtend.cs" />
     <Compile Include="Extensions\ValidateExtend.cs" />

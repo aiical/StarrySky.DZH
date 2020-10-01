@@ -110,7 +110,7 @@ namespace StarrySky.DZH.Util.EnumUtil.Tests
                 foreach (var p in properties)
                 {
                     object[] PrimaryKey = p.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
-                    if (!PrimaryKey.IsNullOrEmptyCollection()) {
+                    if (!PrimaryKey.CollectionIsNullOrEmpty()) {
                         ss = p.Name;
                     }
                 }
@@ -120,7 +120,7 @@ namespace StarrySky.DZH.Util.EnumUtil.Tests
                 foreach (var p in properties1)
                 {
                     object[] PrimaryKey = p.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
-                    if (!PrimaryKey.IsNullOrEmptyCollection())
+                    if (!PrimaryKey.CollectionIsNullOrEmpty())
                     {
                         ss1 = p.Name;
                     }
@@ -131,7 +131,7 @@ namespace StarrySky.DZH.Util.EnumUtil.Tests
                 foreach (var p in properties2)
                 {
                     object[] PrimaryKey = p.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
-                    if (!PrimaryKey.IsNullOrEmptyCollection())
+                    if (!PrimaryKey.CollectionIsNullOrEmpty())
                     {
                         ss2 = p.Name;
                     }

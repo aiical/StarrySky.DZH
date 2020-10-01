@@ -118,11 +118,11 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
                 }
                 object[] PrimaryKey = leftExpress.Member.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
                 object[] Ignore = leftExpress.Member.GetCustomAttributes(typeof(IgnoreFieldAttribute), false);
-                if (!PrimaryKey.IsNullOrEmptyCollection() && _eTranslator == TranslatorEnum.Update)
+                if (!PrimaryKey.CollectionIsNullOrEmpty() && _eTranslator == TranslatorEnum.Update)
                 {
                     throw new Exception("主键字段不支持更新");
                 }
-                if (!Ignore.IsNullOrEmptyCollection())
+                if (!Ignore.CollectionIsNullOrEmpty())
                 {
                     return node;
                 }
@@ -227,11 +227,11 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
             {
                 object[] PrimaryKey = item.Member.GetCustomAttributes(typeof(PrimaryKeyAttribute), false);
                 object[] Ignore = item.Member.GetCustomAttributes(typeof(IgnoreFieldAttribute), false);
-                if (!PrimaryKey.IsNullOrEmptyCollection() && _eTranslator == TranslatorEnum.Update)
+                if (!PrimaryKey.CollectionIsNullOrEmpty() && _eTranslator == TranslatorEnum.Update)
                 {
                     throw new Exception("主键字段不支持更新");
                 }
-                if (!Ignore.IsNullOrEmptyCollection())
+                if (!Ignore.CollectionIsNullOrEmpty())
                 {
                     return node;
                 }
@@ -290,7 +290,7 @@ namespace StarrySky.DZH.TopORM.ExpressionLib
         protected override Expression VisitParameter(ParameterExpression node)
         {
             var properties = node.Type.GetProperties();
-            if (!properties.IsNullOrEmptyCollection())
+            if (!properties.CollectionIsNullOrEmpty())
             {
                 if (_eTranslator == TranslatorEnum.Select)
                 {

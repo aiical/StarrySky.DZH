@@ -17,7 +17,8 @@ namespace StarrySky.DZH.Util.Extensions
         /// <summary>
         /// 时间戳(毫秒级别) 13位
         /// </summary>
-        /// <returns></returns>
+        /// <param name="datetime">datetime</param>
+        /// <returns>returns</returns>
         public static string GetTimeStamp_MilliSeconds(this DateTime datetime)
         {
             TimeSpan ts = datetime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
@@ -28,12 +29,48 @@ namespace StarrySky.DZH.Util.Extensions
         /// <summary>
         /// 时间戳(秒级别) 10位
         /// </summary>
-        /// <returns></returns>
+        /// <param name="datetime">datetime</param>
+        /// <returns>returns</returns>
         private static string GetTimeStamp_Seconds(this DateTime datetime)
         {
             TimeSpan ts = datetime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
+
+        
+
+        /// <summary>
+        /// 转成日期型"yyyy-MM-dd"
+        /// </summary>
+        /// <param name="date">对象</param>
+        /// <param name="v">格式</param>
+        /// <returns>日期</returns>
+        public static string PackDateTimeToStr(this DateTime? date, string v = "yyyy-MM-dd")
+        {
+            if (date == null || !date.HasValue || date <= new DateTime(2000, 1, 1))
+            {
+                return string.Empty;
+            }
+
+            return date.Value.ToString(v);
+        }
+
+        /// <summary>
+        /// 转成日期型"yyyy-MM-dd"
+        /// </summary>
+        /// <param name="date">对象</param>
+        /// <returns>日期</returns>
+        public static string PackDateTimeToStr(this DateTime date)
+        {
+            if (date == null || date <= new DateTime(2000, 1, 1))
+            {
+                return string.Empty;
+            }
+
+            return date.ToString("yyyy-MM-dd");
+        }
+
+        
 
         /// <summary>
         /// 转到固定格式 :dateFormat 0 返回 "yyyy/MM/dd HH:mm:ss", 1 返回"yyyy-MM-dd HH:mm:ss"
