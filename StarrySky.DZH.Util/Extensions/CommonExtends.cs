@@ -37,5 +37,55 @@ namespace StarrySky.DZH.Util.Extensions
                 list.Add(item);
             }
         }
+
+        /// <summary>
+        /// 扩展字符串包含某些特定字符串，只要包含一个即为true,否则false
+        /// </summary>
+        /// <param name="str">要匹配的字符</param>
+        /// <param name="matchColle">匹配集合</param>
+        /// <returns>true 包含， fasle 不包含</returns>
+        public static bool ContainsOneOfList(this string str, List<string> matchColle)
+        {
+            if (matchColle.CollectionIsNullOrEmpty())
+            {
+                return false;
+            }
+
+            return matchColle.Exists(x => str.Contains(x));
+        }
+
+        /// <summary>
+        /// 扩展字符串包含某些特定字符串，只要包含一个即为true,否则false
+        /// </summary>
+        /// <param name="str">要匹配的字符</param>
+        /// <param name="matchSpecials">匹配集合,只接受英文逗号隔开的字符串</param>
+        /// <returns>true 包含， fasle 不包含</returns>
+        public static bool ContainsOneOfSpecial(this string str, string matchSpecials)
+        {
+            if (matchSpecials.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            var matchColle = matchSpecials.Split(',').ToList();
+            return matchColle.Exists(x => str.Contains(x));
+        }
+
+        /// <summary>
+        /// 扩展字符串等于某些特定字符串，只要等于一个即为true,否则false
+        /// </summary>
+        /// <param name="str">要匹配的字符</param>
+        /// <param name="matchSpecials">匹配集合,只接受英文逗号隔开的字符串</param>
+        /// <returns>true 等于， fasle 不等于</returns>
+        public static bool EqualsOneOfSpecial(this string str, string matchSpecials)
+        {
+            if (matchSpecials.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            var matchColle = matchSpecials.Split(',').ToList();
+            return matchColle.Exists(x => str.Equals(x));
+        }
     }
 }
