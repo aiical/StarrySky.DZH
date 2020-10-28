@@ -34,15 +34,25 @@ namespace StarrySky.DZH.Util.Extensions
         /// <typeparam name="T">反序列化类型</typeparam>
         /// <param name="jsonStr">Json字符串</param>
         /// <param name="settings">配置</param>
-        /// <returns></returns>
-        public static T PackJsonObject<T>(this string jsonStr, JsonSerializerSettings settings = (JsonSerializerSettings)null) where T : new()
+        /// <returns>结果</returns>
+        public static T PackJsonObject<T>(this string jsonStr, JsonSerializerSettings settings = (JsonSerializerSettings)null)
+            where T : new()
         {
             if (jsonStr.IsNullOrWhiteSpace())
             {
                 return new T();
             }
+
+            // 修复jsonstring字符串中包含反斜杠导致无法序列化的问题，其它特殊字符目前没发现报错的
+            if (jsonStr.Contains(@"\"))
+            {
+                jsonStr = jsonStr.Replace(@"\", "_");
+            }
+
+            // return (JsonConvert.DeserializeObject(jsonStr) as JObject).ToObject<T>();
             return JsonConvert.DeserializeObject<T>(jsonStr, settings);
         }
+
         /// <summary>
         /// 转成数值（decimal 转int 失败 18.0000 转 成0 了）
         /// </summary>
