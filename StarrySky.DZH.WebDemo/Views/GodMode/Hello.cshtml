@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "与神同行，请谨慎";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="editApp">
+    <el-tabs type="border-card">
+        <el-tab-pane label="表操作">
+            <div>
+                <el-row>
+                    <el-form class="demo-form-inline" label-width="100px">
+                        <el-form-item label="数据库名称">
+                            <el-select v-model="Model.DBName" size="small" placeholder="数据库名称">
+                                <el-option label="TCDAILYSURPRISE" value="TCDAILYSURPRISE"></el-option>
+                                <el-option label="TCSURPRISEMEMBER" value="TCSURPRISEMEMBER"></el-option>
+                                <el-option label="TCSURPRISEGAMELOG" value="TCSURPRISEGAMELOG"></el-option>
+                                <el-option label="TCUSANSurpriseDataBI" value="TCUSANSurpriseDataBI"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-row>
+                            <el-col :span="4">
+                                <el-form-item label="执行者">
+                                    <el-input size="small" v-model="Model.ActionName" placeholder="请输入执行者"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="执行原因">
+                                    <el-input size="small" v-model="Model.ActionDesc" placeholder="请输入执行原因"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-form-item label="SQL">
+                            <el-input size="small" v-model="Model.SQLInfo" placeholder="SQL" type="textarea"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="danger" size="small" v-on:click="UpdateData">更新</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-row>
+            </div>
+        </el-tab-pane>
+        <el-tab-pane label="Redis操作">
+        </el-tab-pane>
+    </el-tabs>
+</div>
+<script>
+    var vm = new Vue({
+        el: "#editApp",
+        data: function () {
+            return {
+                Model: {
+                    DBName: "",
+                    ActionName: "",
+                    ActionDesc: "",
+                    SQLInfo: "",
+                }
+            };
+        },
+        computed: {
+
+        },
+        methods: {
+            checkData() {
+                var that = this;
+                if (that.Model.DBName == '') {
+                    that.$message.error('请选择数据库名称');
+                    return false;
+                }
+                if (that.Model.ActionName == '') {
+                    that.$message.error('请输入执行者');
+                    return false;
+                }
+                if (that.Model.ActionDesc == '') {
+                    that.$message.error('请输入执行原因');
+                    return false;
+                }
+                return true;
+            },
+            UpdateData() {
+                let that = this;
+                if (!that.checkData()) {
+                    return;
+                }
+                this.$confirm(`请再次确认sql无误?`, '提示', {
+                    confirmButtonText: '嗯,我确定',
+                    cancelButtonText: '手滑了',
+                    type: 'warning'
+                }).then(() => {
+                    var url = `/AloneWithGod/UpdateData`;
+                    ajaxCall.Post(that, url, that.Model
+                        , function (that, data) {
+                            that.alert.Success(data);
+                        }, function (that) {
+
+                        });
+                }).catch(() => { });
+            },
+        },
+        mounted: function () {
+        }
+
+    });
+
+</script>

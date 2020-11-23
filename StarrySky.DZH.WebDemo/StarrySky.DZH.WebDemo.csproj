@@ -577,7 +577,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="CustomAttribute\BPMFilterAttribute.cs" />
     <Compile Include="CustomAttribute\MyActionFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -595,6 +594,37 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\element.css" />
+    <Content Include="Content\css\element_2_11_1.css" />
+    <Content Include="Content\css\fonts\iconfont.svg" />
+    <Content Include="Content\css\index.css" />
+    <Content Include="Content\scripts\component\frame-button.js" />
+    <Content Include="Content\scripts\component\new-iframe.js" />
+    <Content Include="Content\scripts\utils\ajax.utils.js" />
+    <Content Include="Content\scripts\utils\alert-message.js" />
+    <Content Include="Content\scripts\utils\area_new.js" />
+    <Content Include="Content\scripts\utils\axios.min.js" />
+    <Content Include="Content\scripts\utils\city_new.js" />
+    <Content Include="Content\scripts\utils\clipboard.min.js" />
+    <Content Include="Content\scripts\utils\district.js" />
+    <Content Include="Content\scripts\utils\echarts.js" />
+    <Content Include="Content\scripts\utils\echarts.min.js" />
+    <Content Include="Content\scripts\utils\element.js" />
+    <Content Include="Content\scripts\utils\element_2_11_1.js" />
+    <Content Include="Content\scripts\utils\index.js" />
+    <Content Include="Content\scripts\utils\jquery-3.3.1.js" />
+    <Content Include="Content\scripts\utils\layer\layer.js" />
+    <Content Include="Content\scripts\utils\layer\theme\default\icon-ext.png" />
+    <Content Include="Content\scripts\utils\layer\theme\default\icon.png" />
+    <Content Include="Content\scripts\utils\layer\theme\default\layer.css" />
+    <Content Include="Content\scripts\utils\layer\theme\default\loading-0.gif" />
+    <Content Include="Content\scripts\utils\layer\theme\default\loading-1.gif" />
+    <Content Include="Content\scripts\utils\layer\theme\default\loading-2.gif" />
+    <Content Include="Content\scripts\utils\linq.js" />
+    <Content Include="Content\scripts\utils\moment.js" />
+    <Content Include="Content\scripts\utils\province_new.js" />
+    <Content Include="Content\scripts\utils\utils.js" />
+    <Content Include="Content\scripts\utils\vue.js" />
     <Content Include="CSS\CommonCss.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -605,6 +635,11 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\css\fonts\element-icons.ttf" />
+    <Content Include="Content\css\fonts\element-icons.woff" />
+    <Content Include="Content\css\fonts\iconfont.eot" />
+    <Content Include="Content\css\fonts\iconfont.ttf" />
+    <Content Include="Content\css\fonts\iconfont.woff" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -617,6 +652,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="table样式.html" />
+    <Content Include="Views\GodMode\Index.html" />
+    <Content Include="Views\GodMode\RedisHome.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -627,10 +664,12 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Layout_bak.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\GodMode\Hello.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

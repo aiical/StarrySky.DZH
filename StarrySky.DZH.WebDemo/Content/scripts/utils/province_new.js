@@ -1,0 +1,138 @@
+var provinceData =
+[{
+	"label": "北京",
+	"value": "11",
+	"cid": 3
+}, {
+	"label": "天津",
+	"value": "12",
+	"cid": 27
+}, {
+	"label": "河北",
+	"value": "13",
+	"cid": 10
+}, {
+	"label": "山西",
+	"value": "14",
+	"cid": 23
+}, {
+	"label": "内蒙古",
+	"value": "15",
+	"cid": 19
+}, {
+	"label": "辽宁",
+	"value": "21",
+	"cid": 18
+}, {
+	"label": "吉林",
+	"value": "22",
+	"cid": 15
+}, {
+	"label": "黑龙江",
+	"value": "23",
+	"cid": 12
+}, {
+	"label": "上海",
+	"value": "31",
+	"cid": 25
+}, {
+	"label": "江苏",
+	"value": "32",
+	"cid": 16
+}, {
+	"label": "浙江",
+	"value": "33",
+	"cid": 31
+}, {
+	"label": "安徽",
+	"value": "34",
+	"cid": 2
+}, {
+	"label": "福建",
+	"value": "35",
+	"cid": 4
+}, {
+	"label": "江西",
+	"value": "36",
+	"cid": 17
+}, {
+	"label": "山东",
+	"value": "37",
+	"cid": 22
+}, {
+	"label": "河南",
+	"value": "41",
+	"cid": 11
+}, {
+	"label": "湖北",
+	"value": "42",
+	"cid": 13
+}, {
+	"label": "湖南",
+	"value": "43",
+	"cid": 14
+}, {
+	"label": "广东",
+	"value": "44",
+	"cid": 6
+}, {
+	"label": "广西",
+	"value": "45",
+	"cid": 7
+}, {
+	"label": "海南",
+	"value": "46",
+	"cid": 9
+}, {
+	"label": "重庆",
+	"value": "50",
+	"cid": 32
+}, {
+	"label": "四川",
+	"value": "51",
+	"cid": 26
+}, {
+	"label": "贵州",
+	"value": "52",
+	"cid": 8
+}, {
+	"label": "云南",
+	"value": "53",
+	"cid": 30
+}, {
+	"label": "西藏",
+	"value": "54",
+	"cid": 28
+}, {
+	"label": "陕西",
+	"value": "61",
+	"cid": 24
+}, {
+	"label": "甘肃",
+	"value": "62",
+	"cid": 5
+}, {
+	"label": "青海",
+	"value": "63",
+	"cid": 21
+}, {
+	"label": "宁夏",
+	"value": "64",
+	"cid": 20
+}, {
+	"label": "新疆",
+	"value": "65",
+	"cid": 29
+}, {
+	"label": "台湾",
+	"value": "71",
+	"cid": 35
+}, {
+	"label": "香港",
+	"value": "81",
+	"cid": 33
+}, {
+	"label": "澳门",
+	"value": "82",
+	"cid": 34
+}]
