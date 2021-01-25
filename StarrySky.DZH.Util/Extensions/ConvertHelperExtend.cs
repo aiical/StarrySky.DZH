@@ -55,12 +55,18 @@ namespace StarrySky.DZH.Util.Extensions
 
         /// <summary>
         /// 转成数值（decimal 转int 失败 18.0000 转 成0 了）
+        /// TODO fix bug
+        /// int.TryParse("12.00", out var num); num 输出0
+        /// int.TryParse(12.00.ToString(), out var num); num  输出12
+        /// int.TryParse(12.00m.ToString(), out var num); num   输出0
+        /// int.TryParse(12.60m.ToString("#"), out var num); num 输出13
         /// </summary>
         /// <param name="value">对象</param>
         /// <param name="defaultValue">默认值0</param>
         /// <returns>数值</returns>
         public static int PackInt(this object value, int defaultValue = 0)
         {
+            // TODO fix bug
             int num;
             if ((value == null) || (value == DBNull.Value))
             {
@@ -71,17 +77,14 @@ namespace StarrySky.DZH.Util.Extensions
             {
                 return (int)value;
             }
-
-            if (value is string)
+            else if (value is decimal)
             {
-                if (!int.TryParse(value.ToString(), out num))
+                if (!int.TryParse(((decimal)value).ToString("#"), out num))
                 {
                     return defaultValue;
                 }
             }
-
-            // TODO fix bug
-            if (!int.TryParse(value.ToString(), out num))
+            else if (!int.TryParse(value.ToString(), out num))
             {
                 return defaultValue;
             }

@@ -13,7 +13,117 @@ namespace StarrySky.DZH.Util.Excel
 {
     public class NpoiExcelHelper
     {
+        #region 生成模板 包含指定excel单元格为下拉框
+        /*
+         *  /// <summary>
+        /// 转list到execl
+        /// </summary>
+        /// <typeparam name="T">实体</typeparam>
+        /// <param name="workbook">book</param>
+        /// <param name="list">集合</param>
+        /// <param name="sheetName">sheet名</param>
+        private void ListToExecl<T>(XSSFWorkbook workbook, List<T> list, string sheetName)
+            where T : class, new()
+        {
+            sheetName = string.IsNullOrEmpty(sheetName) ? "Sheet1" : sheetName;
+            workbook.CreateSheet(sheetName);
+            var sheetOne = workbook.GetSheet(sheetName); // 获取名称为xx的工作表
+            var headerRow = sheetOne.CreateRow(0);  // 获取Sheet1工作表的首行
+            // Header格式
+            ICellStyle cellStyle = workbook.CreateCellStyle();
+
+            // 边框
+            cellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+            cellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+            cellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+            cellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+
+            // 获取所有列名
+            var cellNames = new T().GetType().GetProperties();
+            for (var j = 0; j < cellNames.Length; j++)
+            {
+                var cell = headerRow.CreateCell(j);
+                cell.SetCellValue(cellNames[j].Name);
+
+                // 设置单元的宽度
+                sheetOne.SetColumnWidth(j, 20 * 256);
+                cell.CellStyle = cellStyle;
+                headerRow.Cells.Add(cell);
+            }
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                var sheetRow = sheetOne.CreateRow(i + 1);
+                var properties = item.GetType().GetProperties();
+                for (var j = 0; j < properties.Length; j++)
+                {
+                    var cell = sheetRow.CreateCell(j, CellType.String);
+                    cell.SetCellValue(properties[j].GetValue(item, null)?.ToString() ?? string.Empty);
+                    cell.CellStyle = cellStyle;
+                    sheetRow.Cells.Add(cell);
+                }
+            }
+
+            #region 处理需要下拉框的列
+            var invTypeList = new List<string>();
+            foreach (Enum enumValue in Enum.GetValues(typeof(BW_Stand_Tickets_InvoiceTypeEnum)))
+            {
+                int key = enumValue.GetHashCode();
+                string description = enumValue.GetEnumDescription();
+                invTypeList.Add(description);
+            }
+
+            var sheetName_Dropdown = "InvoiceType";
+            var sheet2 = workbook.CreateSheet(sheetName_Dropdown);
+            workbook.SetSheetHidden(workbook.GetSheetIndex(sheetName_Dropdown), SheetState.Hidden); // 隐藏Sheet
+            for (int i = 0; i < invTypeList.Count; i++)
+            {
+                sheet2.CreateRow(i).CreateCell(0).SetCellValue(invTypeList[i]);
+            }
+
+            var rangeName = $"{sheetName_Dropdown}Range";
+            IName range = workbook.CreateName();
+            range.RefersToFormula = $"{sheetName_Dropdown}!$A$1:$A${(invTypeList.Count == 0 ? 1 : invTypeList.Count)}";
+            range.NameName = rangeName;
+            #endregion
+            #region xssf用法
+            CellRangeAddressList addressList = new CellRangeAddressList(1, 65535, 2, 2); // 设置生成下拉框的行和列，从第1到第65535行，从第3列到第3列
+            XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper((XSSFSheet)sheetOne);
+
+            XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)dvHelper
+                    .CreateFormulaListConstraint(rangeName);
+
+            // 设置区域边界
+            XSSFDataValidation validation = (XSSFDataValidation)dvHelper
+                    .CreateValidation(dvConstraint, addressList);
+
+            // 输入非法数据时，弹窗警告框
+            validation.ShowErrorBox = true;
+
+            // 设置提示框
+            validation.CreateErrorBox("输入不合法", "请输入或选择下拉列表中的值。");
+            validation.ShowPromptBox = true;
+            sheetOne.AddValidationData(validation);
+            #endregion
+            #region hssf
+
+            // CellRangeAddressList regions = new CellRangeAddressList(1, 65535, 3, 3);
+            // DVConstraint constraint = DVConstraint.CreateFormulaListConstraint(rangeName);
+            // HSSFDataValidation dataValidate = new HSSFDataValidation(regions, constraint);
+            // dataValidate.CreateErrorBox("输入不合法", "请输入或选择下拉列表中的值。");
+            // dataValidate.ShowPromptBox = true;
+            // sheetOne.AddValidationData(dataValidate);
+            #endregion
+
+        }
+       
+         */
+
+        #endregion
+
         /// <summary>
+        /// 转execl到list（execl的第一行需要严格对应到class的第一个属性，速度较慢，数据量大请误用）
         /// 只支持属性全是string的T对象（防止类型转换异常）
         /// excel第一行需为列名
         /// </summary>
@@ -65,17 +175,24 @@ namespace StarrySky.DZH.Util.Excel
                     {
                         var cell = row.GetCell(j);
                         if (cell == null) continue;
-                        //fix excel中日期格式会变成numeric,直接转string获取的是double类型的字串问题
-                        if (cell.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(cell))
+                        // fix excel中日期格式会变成numeric,直接转string获取的是double类型的字串问题
+                        // 不能直接cell.DateCellValue尝试取值，会抛异常，没有该属性
+                        // 如果是数值型，直接使用 cell.NumericCellValue会有精度问题。需要调用SetCellType(CellType.String)转换一下
+                        if (cell.CellType == CellType.Numeric && DateUtil.IsValidExcelDate(cell.NumericCellValue) && DateUtil.IsCellDateFormatted(cell))
                         {
-                            var cellvalue = cell.DateCellValue.ToString("yyyy-MM-dd HH:mm:ss");
-                            typeof(T).GetProperty(fields[j])?.SetValue(t, cellvalue, null);
+                            // excel中传“2020年11月23日”如果不设置excel格式，这里还是会cell.CellType == CellType.Numeric 但是DateUtil.IsCellDateFormatted(cell) 为false
+                            // 但是DateUtil.IsCellDateFormatted(cell)判断不能去掉，否则常规数字也会转成日期
+                            // DateUtil.IsValidExcelDate(cell.NumericCellValue) 没啥用处， 153.6也能识别为true,因为1970-01-01为1;
+                            string strValue = cell.DateCellValue.ToString("yyyy-MM-dd HH:mm:ss");
+                            typeof(T).GetProperty(fields[j])?.SetValue(t, strValue, null);
                             continue;
                         }
                         else if (cell.CellType != CellType.String)
                         {
+                            // 如果是数值型，直接使用 cell.NumericCellValue会有精度问题。需要调用SetCellType(CellType.String)转换一下
                             cell.SetCellType(CellType.String);
                         }
+                        
                         if (cell.StringCellValue != null)
                         {
                             var cellValue = cell.StringCellValue.Trim();
@@ -152,6 +269,59 @@ namespace StarrySky.DZH.Util.Excel
             workbook.Write(ms);
             return ms;
         }
+
+
+        /// <summary>
+        /// 转list到execl,美化了excel
+        /// </summary>
+        /// <typeparam name="T">实体</typeparam>
+        /// <param name="workbook">book</param>
+        /// <param name="list">集合</param>
+        /// <param name="sheetName">sheet名</param>
+        public static void ListToExecl_Format<T>(XSSFWorkbook workbook, List<T> list, string sheetName)
+            where T : class, new()
+        {
+            sheetName = string.IsNullOrEmpty(sheetName) ? "Sheet1" : sheetName;
+            workbook.CreateSheet(sheetName);
+            var sheetOne = workbook.GetSheet(sheetName); // 获取名称为xx的工作表
+            var headerRow = sheetOne.CreateRow(0);  // 获取Sheet1工作表的首行
+            // Header格式
+            ICellStyle cellStyle = workbook.CreateCellStyle();
+
+            // 边框
+            cellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+            cellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+            cellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+            cellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+
+            // 获取所有列名
+            var cellNames = new T().GetType().GetProperties();
+            for (var j = 0; j < cellNames.Length; j++)
+            {
+                var cell = headerRow.CreateCell(j);
+                cell.SetCellValue(cellNames[j].Name);
+
+                // 设置单元的宽度
+                sheetOne.SetColumnWidth(j, 20 * 256);
+                cell.CellStyle = cellStyle;
+                headerRow.Cells.Add(cell);
+            }
+
+            for (var i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                var sheetRow = sheetOne.CreateRow(i + 1);
+                var properties = item.GetType().GetProperties();
+                for (var j = 0; j < properties.Length; j++)
+                {
+                    var cell = sheetRow.CreateCell(j, CellType.String);
+                    cell.SetCellValue(properties[j].GetValue(item, null)?.ToString() ?? string.Empty);
+                    cell.CellStyle = cellStyle;
+                    sheetRow.Cells.Add(cell);
+                }
+            }
+        }
+
 
 
         #region DataTable
