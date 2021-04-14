@@ -115,6 +115,7 @@
     <Compile Include="Common\DateTimeHelper.cs" />
     <Compile Include="Common\DLLConfigHelper.cs" />
     <Compile Include="Common\DeepCloneHelper.cs" />
+    <Compile Include="Common\FileUploadService.cs" />
     <Compile Include="Common\IPAddressHelper.cs" />
     <Compile Include="Common\Mail.cs" />
     <Compile Include="Common\ObjectHelper.cs" />
