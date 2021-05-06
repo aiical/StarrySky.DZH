@@ -191,9 +191,11 @@ namespace StarrySky.DZH.Util.Common
             method = method?.ToUpper() ?? "";
             var result = string.Empty;
             Stopwatch stopWatch = Stopwatch.StartNew();
+            HttpWebRequest webRequest = null;
+            ServicePointManager.DefaultConnectionLimit = 200;
             try
             {
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
+                webRequest = (HttpWebRequest)WebRequest.Create(url);
 
                 #region 请求头处理
                 if (headers != null && headers.Any())
@@ -234,6 +236,7 @@ namespace StarrySky.DZH.Util.Common
                     webRequest.Headers.Add("Content-Encoding", "gzip");
                 }
                 webRequest.Timeout = 5000;
+                webRequest.ServicePoint.Expect100Continue = false;
 
                 //响应流
                 var webResponse = (HttpWebResponse)webRequest.GetResponse();
@@ -246,17 +249,26 @@ namespace StarrySky.DZH.Util.Common
                 switch (err.Status)
                 {
                     case WebExceptionStatus.Timeout:
-                        result = "请求超时,耗时:" + elapsed + "，WebException:" + err;
+                        result = $"请求超时,耗时:{elapsed},网络异常:{err.Message}";
                         break;
                     default:
-                        result = "耗时:" + elapsed + "，WebException:" + err;
+                        result = $"耗时:{elapsed}，状态码：{err.Status},网络异常:{err.Message}";
                         break;
                 }
+
+                if (webRequest != null)
+                {
+                    webRequest.Abort();
+                    webRequest = null;
+                    System.GC.Collect();
+                }
+
+                throw new Exception(result, err);
             }
             catch (Exception ex)
             {
                 stopWatch.Stop();
-                throw new Exception("访问出错\r\n调用地址:" + url + "\r\n参数:" + postdata + "\r\n", ex);
+                throw new Exception($"访问出错\r\n调用地址:{url}\r\n参数:{postdata}\r\n", ex);
             }
 
             stopWatch.Stop();
