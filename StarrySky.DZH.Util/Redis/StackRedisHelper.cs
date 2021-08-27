@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace StarrySky.DZH.Util.Redis
 {
-    public static class RedisHelper
+    public static class StackRedisHelper
     {
         /// <summary>
         /// 数据库
         /// </summary>
         private static IDatabase _db;
         private static IConnectionMultiplexer _connMultiplexer;
-        static RedisHelper()
+        static StackRedisHelper()
         {
             _connMultiplexer = RedisInstance.GetConnectionRedisMultiplexer();
             _db = RedisInstance.GetConnectionRedisMultiplexer().GetDatabase();
