@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2041
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarrySky.DZH.Util", "StarrySky.DZH.Util\StarrySky.DZH.Util.csproj", "{02491BEE-5C11-43D7-9728-3D71A2E1ED94}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DZHCodeBuilder", "DZHCodeBuilder\DZHCodeBuilder.csproj", "{A78CCE58-78B2-4949-B31A-3CB956EFE8B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarrySky.DZH.TopORM", "StarrySky.DZH.TopORM\StarrySky.DZH.TopORM.csproj", "{D57C32CE-5835-407D-ACF0-5132E5B41773}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovitCodeTools", "MovitCodeTools\MovitCodeTools.csproj", "{4D6034C6-A4E8-4B82-B746-F7518F04038B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{D57C32CE-5835-407D-ACF0-5132E5B41773}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D57C32CE-5835-407D-ACF0-5132E5B41773}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D57C32CE-5835-407D-ACF0-5132E5B41773}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D6034C6-A4E8-4B82-B746-F7518F04038B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D6034C6-A4E8-4B82-B746-F7518F04038B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D6034C6-A4E8-4B82-B746-F7518F04038B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D6034C6-A4E8-4B82-B746-F7518F04038B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

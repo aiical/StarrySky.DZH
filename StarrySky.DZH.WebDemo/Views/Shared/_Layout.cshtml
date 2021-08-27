@@ -1,43 +1,39 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-</head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("应用程序名称", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("主页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("关于", "About", "Home")</li>
-                    <li>@Html.ActionLink("联系方式", "Contact", "Home")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
-        </footer>
-    </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/Content/css/element_2_11_1.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Content/css/index.css" asp-append-version="true" />
+    <script src="~/Content/scripts/utils/vue.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/element_2_11_1.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/axios.min.js"></script>
+    <script src="~/Content/scripts/utils/jquery-3.3.1.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/ajax.utils.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/alert-message.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/utils.js?v=2019" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/linq.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/layer/layer.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/utils/moment.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/component/new-iframe.js" asp-append-version="true"></script>
+    <script src="~/Content/scripts/component/frame-button.js" asp-append-version="true"></script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @RenderSection("Header", false)
+    <style>
+        .span-long-text {
+            line-height: 30px;
+            text-align: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body style="margin-left:16px;">
+    <div style="height: 15px;width: 100%"></div>
+    @RenderBody()
+
+    @RenderSection("Footer", false)
 </body>
 </html>

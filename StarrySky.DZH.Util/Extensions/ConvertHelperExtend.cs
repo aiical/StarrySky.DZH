@@ -34,34 +34,64 @@ namespace StarrySky.DZH.Util.Extensions
         /// <typeparam name="T">反序列化类型</typeparam>
         /// <param name="jsonStr">Json字符串</param>
         /// <param name="settings">配置</param>
-        /// <returns></returns>
+        /// <returns>结果</returns>
         public static T PackJsonObject<T>(this string jsonStr, JsonSerializerSettings settings = (JsonSerializerSettings)null)
+            where T : new()
         {
+            if (jsonStr.IsNullOrWhiteSpace())
+            {
+                return new T();
+            }
+
+            // 修复jsonstring字符串中包含反斜杠导致无法序列化的问题，其它特殊字符目前没发现报错的
+            if (jsonStr.Contains(@"\"))
+            {
+                jsonStr = jsonStr.Replace(@"\", "_");
+            }
+
+            // return (JsonConvert.DeserializeObject(jsonStr) as JObject).ToObject<T>();
             return JsonConvert.DeserializeObject<T>(jsonStr, settings);
         }
+
         /// <summary>
         /// 转成数值（decimal 转int 失败 18.0000 转 成0 了）
+        /// TODO fix bug
+        /// int.TryParse("12.00", out var num); num 输出0
+        /// int.TryParse(12.00.ToString(), out var num); num  输出12
+        /// int.TryParse(12.00m.ToString(), out var num); num   输出0
+        /// int.TryParse(12.60m.ToString("#"), out var num); num 输出13
         /// </summary>
         /// <param name="value">对象</param>
         /// <param name="defaultValue">默认值0</param>
         /// <returns>数值</returns>
-        public static int PackInt(this object value, int defaultValue = 0) 
+        public static int PackInt(this object value, int defaultValue = 0)
         {
+            // TODO fix bug
             int num;
             if ((value == null) || (value == DBNull.Value))
             {
                 return defaultValue;
             }
+
             if (value is int)
             {
                 return (int)value;
             }
-            if (!int.TryParse(value.ToString(), out num))// need fix bug
+            else if (value is decimal)
+            {
+                if (!int.TryParse(((decimal)value).ToString("#"), out num))
+                {
+                    return defaultValue;
+                }
+            }
+            else if (!int.TryParse(value.ToString(), out num))
             {
                 return defaultValue;
             }
+
             return num;
         }
+
         /// <summary>
         /// 转成小数
         /// </summary>
@@ -76,15 +106,27 @@ namespace StarrySky.DZH.Util.Extensions
             {
                 return defaultValue;
             }
+
             if (value is decimal)
             {
                 return Math.Round((decimal)value, num);
             }
+
             if (!decimal.TryParse(value.ToString(), out number))
             {
                 return defaultValue;
             }
+
             return Math.Round(number, num);
+        }
+        /// <summary>
+        /// 转成小数
+        /// </summary>
+        /// <param name="value">对象</param>
+        /// <returns>小数</returns>
+        public static decimal PackNullDecimal(this decimal? value)
+        {
+            return value.HasValue ? value.Value : 0m;
         }
         /// <summary>
         /// 转成浮点数
@@ -120,10 +162,12 @@ namespace StarrySky.DZH.Util.Extensions
             {
                 return string.Empty;
             }
+
             if (value.GetType() == typeof(byte[]))
             {
                 return Encoding.ASCII.GetString((byte[])value, 0, ((byte[])value).Length);
             }
+
             return value.ToString();
         }
         /// <summary>
@@ -138,14 +182,17 @@ namespace StarrySky.DZH.Util.Extensions
             {
                 return new DateTime(2000, 1, 1);
             }
+
             if (value is DateTime)
             {
                 return (DateTime)value;
             }
+
             if (!DateTime.TryParse(value.ToString(), out time))
             {
                 return new DateTime(2000, 1, 1);
             }
+
             return time;
         }
         /// <summary>
@@ -183,14 +230,17 @@ namespace StarrySky.DZH.Util.Extensions
             {
                 return defaultVal;
             }
+
             if (value is long)
             {
                 return (long)value;
             }
+
             if (!long.TryParse(value.ToString(), out num))
             {
                 return defaultVal;
             }
+
             return num;
         }
         /// <summary>
@@ -346,103 +396,6 @@ namespace StarrySky.DZH.Util.Extensions
                  , string.IsNullOrEmpty(onclick) ? "" : string.Format("onclick='{0}'", onclick.PackHtml())
                  , string.IsNullOrEmpty(target) ? "" : string.Format("target='{0}'", target.PackHtml())
                  , string.IsNullOrEmpty(cssClass) ? "" : string.Format("class='{0}'", cssClass.PackHtml()));
-        }
-        /// <summary>
-        /// 获取新增按钮HTML
-        /// </summary>
-        /// <param name="cssClass">按钮样式</param>
-        /// <returns></returns>
-        public static string PackAddButton(string cssClass = "form_bto_only")
-        {
-            return PackButton("新增", "ShowEditPage(0)", cssClass);
-        }
-        /// <summary>
-        /// 获取编辑按钮HTML
-        /// </summary>
-        /// <param name="id">编辑编号</param>
-        /// <param name="cssClass">按钮样式</param>
-        /// <returns></returns>
-        public static string PackEditButton(this object id, string cssClass = "form_bto_only")
-        {
-            return PackButton("编辑", string.Format("ShowEditPage({0})", id.PackInt()), cssClass);
-        }
-        /// <summary>
-        /// 获取删除按钮HTML
-        /// </summary>
-        /// <param name="id">删除编号</param>
-        /// <param name="cssClass">按钮样式</param>
-        /// <returns></returns>
-        public static string PackDelButton(this object id, string cssClass = "form_bto_only")
-        {
-            return PackButton("删除", string.Format("DelData({0})", id.PackInt()), cssClass);
-        }
-        /// <summary>
-        /// 获取无效按钮HTML
-        /// </summary>
-        /// <param name="onclick">按钮点击事件</param>
-        /// <param name="cssClass">按钮样式</param>
-        /// <returns></returns>
-        public static string PackInvalidButton(string onclick, string cssClass = "form_bto_only")
-        {
-            return PackButton("无效", onclick, cssClass);
-        }
-        /// <summary>
-        /// 获取封装后的按钮HTML
-        /// </summary>
-        /// <param name="value">按钮名</param>
-        /// <param name="onclick">按钮点击事件</param>
-        /// <param name="cssClass">按钮样式</param>
-        /// <returns></returns>
-        public static string PackButton(this object value, string onclick, string cssClass = "form_bto_only")
-        {
-            return PackButton(value.PackString(), onclick, cssClass);
-        }
-        /// <summary>
-        /// 获取封装后的按钮HTML
-        /// </summary>
-        /// <param name="value">按钮名</param>
-        /// <param name="onclick">按钮点击事件</param>
-        /// <param name="cssClass">按钮样式</param>
-        /// <returns></returns>
-        public static string PackButton(string value, string onclick, string cssClass = "form_bto_only")
-        {
-            return string.Format(" <input type='button' class='{0}' onclick='{1}' value='{2}' /> ", cssClass.PackHtml(), onclick.PackHtml(), value);
-        }
-        /// <summary>
-        /// 获取对应值的枚举描述
-        /// </summary>
-        /// <param name="value">枚举值</param>
-        /// <param name="enumType">枚举</param>
-        /// <returns></returns>
-        public static string PackEnumValue(this object value, Type enumType)
-        {
-            if (value == null || value == DBNull.Value || enumType == null) return string.Empty;
-            string enumname = string.Empty;
-            System.Reflection.FieldInfo[] fields = enumType.GetFields();
-            //检索所有字段
-            foreach (FieldInfo field in fields)
-            {
-                if (field.FieldType.IsEnum == true)
-                {
-                    //枚举英文
-                    string name = field.Name;
-                    if ((int)Enum.Parse(enumType, name, true) == PackInt(value))
-                    {
-                        DescriptionAttribute da = null;
-                        object[] arrobj = field.GetCustomAttributes(typeof(DescriptionAttribute), true);
-                        if (arrobj.Length > 0)
-                        {
-                            da = arrobj[0] as DescriptionAttribute;
-                        }
-                        if (da != null)
-                        {
-                            //枚举中文描述
-                            enumname = da.Description;
-                        }
-                    }
-                }
-            }
-            return enumname;
         }
 
         /// <summary>

@@ -15,6 +15,131 @@ namespace StarrySky.DZH.Util.Common
     /// </summary>
     public class HttpUtilHelper
     {
+        #region 文件相关
+
+        /// <summary>
+        /// http请求文件到流中
+        /// </summary>
+        /// <param name="url">url</param>
+        /// <returns>returns</returns>
+        public static byte[] GetFileByHttp(string url)
+        {
+            byte[] result = null;
+            HttpWebRequest webRequest = null;
+            ServicePointManager.DefaultConnectionLimit = 200;
+            try
+            {
+                webRequest = (HttpWebRequest)WebRequest.Create(url);
+                webRequest.Method = "GET";
+                webRequest.Timeout = 60000;
+                webRequest.ServicePoint.Expect100Continue = false;
+
+                // 响应流
+                var webResponse = (HttpWebResponse)webRequest.GetResponse();
+                var respStream = webResponse.GetResponseStream();  // 获取响应的字符串流
+                result = respStream.StreamToByte();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("访问出错\r\n调用地址:" + url, ex);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 文件上传到别的地方
+        /// </summary>
+        /// <param name="url">地址</param>
+        /// <param name="fileName">文件名</param>
+        /// <param name="filebytes">文件字节</param>
+        /// <returns>http响应字符串</returns>
+        public static string PostFile(string url, string fileName, byte[] filebytes)
+        {
+            var result = string.Empty;
+            Stopwatch stopWatch = Stopwatch.StartNew();
+            HttpWebRequest webRequest = null;
+            ServicePointManager.DefaultConnectionLimit = 200;
+            try
+            {
+                webRequest = (HttpWebRequest)WebRequest.Create(url);
+                webRequest.Method = "Post";
+                CookieContainer cookieContainer = new CookieContainer();
+                webRequest.CookieContainer = cookieContainer;
+                webRequest.AllowAutoRedirect = true;
+                string boundary = DateTime.Now.Ticks.ToString("X"); // 随机分隔线
+                webRequest.ContentType = "multipart/form-data;charset=utf-8;boundary=" + boundary;
+                webRequest.Timeout = 5 * 60000;
+                webRequest.ServicePoint.Expect100Continue = false;
+                byte[] startBoundaryBytes = Encoding.UTF8.GetBytes($"--{boundary}\r\n");
+                byte[] endBoundaryBytes = Encoding.UTF8.GetBytes($"\r\n--{boundary}--\r\n");
+
+                // 请求头部信息
+                StringBuilder boundaryBlock = new StringBuilder();
+                /*
+                StringBuilder boundaryBlock = new StringBuilder();
+                boundaryBlock.Append($"--{timpstamp}\r\n");
+                boundaryBlock.Append($"Content-Disposition: form-data; name=\"meta\";\r\n");
+                boundaryBlock.Append($"Content-Type: application/json\r\n");
+                boundaryBlock.Append($"\r\n");
+                boundaryBlock.Append($"{reqjson.meta.PackJson()}\r\n");
+                boundaryBlock.Append($"--{timpstamp}\r\n");
+                boundaryBlock.Append($"Content-Disposition: form-data; name=\"file\"; filename=\"{fileName}\";\r\n");
+                boundaryBlock.Append($"Content-Type: image/jpg\r\n");
+                boundaryBlock.Append($"\r\n");
+                */
+                boundaryBlock.Append($"Content-Disposition: form-data; name=\"media\"; filename=\"{fileName}\";\r\n");
+                boundaryBlock.Append($"Content-Type: application/octet-stream\r\n");
+                boundaryBlock.Append($"\r\n");
+
+                // 拿到http请求流，写入请求
+                var requestStream = webRequest.GetRequestStream();
+                requestStream.Write(startBoundaryBytes, 0, startBoundaryBytes.Length);
+                var p1 = Encoding.UTF8.GetBytes(boundaryBlock.ToString());
+                requestStream.Write(p1, 0, p1.Length);
+                requestStream.Write(filebytes, 0, filebytes.Length);
+                requestStream.Write(endBoundaryBytes, 0, endBoundaryBytes.Length);
+                requestStream.Close();
+
+                // 响应流
+                var webResponse = (HttpWebResponse)webRequest.GetResponse();
+                result = GetResponseStreamToStr(webResponse); // 读取Response中的内容
+            }
+            catch (WebException err)
+            {
+                stopWatch.Stop();
+                var elapsed = stopWatch.ElapsedMilliseconds;
+                switch (err.Status)
+                {
+                    case WebExceptionStatus.Timeout:
+                        result = "请求超时,耗时:" + elapsed + "，WebException:" + err;
+                        break;
+                    default:
+                        result = "耗时:" + elapsed + "，WebException:" + err;
+                        break;
+                }
+
+                if (webRequest != null)
+                {
+                    webRequest.Abort();
+                    webRequest = null;
+                    System.GC.Collect();
+                }
+
+                throw new Exception(result, err);
+            }
+            catch (Exception ex)
+            {
+                stopWatch.Stop();
+                throw new Exception("访问出错\r\n调用地址:" + url, ex);
+            }
+
+            stopWatch.Stop();
+            return result;
+        }
+        #endregion
+
+
         #region HttpWebRequest方式
         /// <summary>
         /// 
@@ -66,9 +191,11 @@ namespace StarrySky.DZH.Util.Common
             method = method?.ToUpper() ?? "";
             var result = string.Empty;
             Stopwatch stopWatch = Stopwatch.StartNew();
+            HttpWebRequest webRequest = null;
+            ServicePointManager.DefaultConnectionLimit = 200;
             try
             {
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
+                webRequest = (HttpWebRequest)WebRequest.Create(url);
 
                 #region 请求头处理
                 if (headers != null && headers.Any())
@@ -109,6 +236,7 @@ namespace StarrySky.DZH.Util.Common
                     webRequest.Headers.Add("Content-Encoding", "gzip");
                 }
                 webRequest.Timeout = 5000;
+                webRequest.ServicePoint.Expect100Continue = false;
 
                 //响应流
                 var webResponse = (HttpWebResponse)webRequest.GetResponse();
@@ -121,17 +249,26 @@ namespace StarrySky.DZH.Util.Common
                 switch (err.Status)
                 {
                     case WebExceptionStatus.Timeout:
-                        result = "请求超时,耗时:" + elapsed + "，WebException:" + err;
+                        result = $"请求超时,耗时:{elapsed},网络异常:{err.Message}";
                         break;
                     default:
-                        result = "耗时:" + elapsed + "，WebException:" + err;
+                        result = $"耗时:{elapsed}，状态码：{err.Status},网络异常:{err.Message}";
                         break;
                 }
+
+                if (webRequest != null)
+                {
+                    webRequest.Abort();
+                    webRequest = null;
+                    System.GC.Collect();
+                }
+
+                throw new Exception(result, err);
             }
             catch (Exception ex)
             {
                 stopWatch.Stop();
-                throw new Exception("访问出错\r\n调用地址:" + url + "\r\n参数:" + postdata + "\r\n", ex);
+                throw new Exception($"访问出错\r\n调用地址:{url}\r\n参数:{postdata}\r\n", ex);
             }
 
             stopWatch.Stop();

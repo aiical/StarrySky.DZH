@@ -1,0 +1,149 @@
+﻿
+<!--@{
+    /**/
+    ViewBag.Title = "redis数据操作";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}-->
+<style>
+    #editApp .el-form-item {
+        margin-bottom: 0px;
+    }
+
+    .el-dialog__body {
+        padding: 10px 10px;
+    }
+</style>
+<div id="editApp">
+    <el-tabs type="border-card">
+        <el-tab-pane label="Redis管理">
+            <el-row>
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item label="redisKey">
+                        <el-row>
+                            <el-input class="inline-input" style="width:400px;" size="small"
+                                      v-model="Model.RedisKey"
+                                      placeholder="请输入Key"></el-input>
+                        </el-row>
+                    </el-form-item>
+                </el-form>
+            </el-row>
+            <el-row>
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item label="数据类型">
+                        <el-select v-model="Model.RedisDataType" size="small" placeholder="redis数据类型">
+                            <el-option label="String" :value="1"></el-option>
+                            <el-option label="List" :value="2"></el-option>
+                            <el-option label="Set" :value="3"></el-option>
+                            <el-option label="SortSet" :value="4"></el-option>
+                            <el-option label="HashTable" :value="5"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="TTL">
+                        <el-input size="small" v-model="Model.TimeOut" placeholder="请输入过期时间（秒）"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-row>
+            <el-row style="padding:10px;">
+                <el-button type="primary" size="small" v-on:click="GetValue">getValue</el-button>
+                <el-button type="danger" size="small" v-on:click="DeleteKey">deleteKey</el-button>
+                <el-button type="warning" size="small" v-on:click="SetTTL">setTTL</el-button>
+            </el-row>
+            <el-row>
+                <el-input type="textarea" size="small" v-model="Model.RedisValue" rows="30"></el-input>
+            </el-row>
+            <el-row style="padding-top: 10px;">
+                <el-button size="small" type="warning" v-on:click="SetValue">Save</el-button>
+            </el-row>
+        </el-tab-pane>
+    </el-tabs>
+</div>
+
+<script>
+    $("#editApp").load("~/Views/Shared/_Layout.html");
+    var vm = new Vue({
+        el: "#editApp",
+        data: function () {
+            return {
+                isCollection: false,//当前key是否被收藏过
+                Model: {
+                    RedisDataType: 1,
+                    RedisKey: "",
+                    RedisValue: "",
+                    TimeOut: "300",
+                },
+            };
+        },
+        watch: {
+        },
+        computed: {
+
+        },
+        methods: {
+            DeleteKey() {
+                let that = this;
+                this.$confirm(`确定要删除key么?`, '提示', {
+                    confirmButtonText: '嗯,我确定',
+                    cancelButtonText: '手滑了',
+                    type: 'warning'
+                }).then(() => {
+                    var url = `/GodMode/DeleteKey?redisKey=${that.Model.RedisKey}`;
+                    ajaxCall.Get(that, url, {}, function (that, data) {
+                        that.alert.Success("删除成功");
+                    });
+                }).catch(() => { });
+            },
+            SetTTL() {
+                let that = this;
+                if (that.Model.TimeOut == undefined || that.Model.TimeOut <= 0) {
+                    that.alert.Error("请输入过期时间");
+                    return;
+                }
+                var url = `/GodMode/SetTTL?redisKey=${that.Model.RedisKey}&timeout=${that.Model.TimeOut}`;
+                ajaxCall.Get(that, url, {}, function (that, data) {
+                    that.alert.Success("设置成功");
+                });
+            },
+            GetStringValue() {
+                let that = this;
+                const url = `/GodMode/GetValue?redisKey=${that.Model.RedisKey}&redisDataType=${that.Model.RedisDataType}`;
+                ajaxCall.Get(that, url, {}, function (that, data) {
+                    debugger
+                    that.Model.RedisValue = data.body.redisValue;
+                    that.Model.TimeOut = data.body.ttl;
+                }, {});
+            },
+            GetValue() {
+                console.log('GetValue');
+                let that = this;
+                that.GetStringValue();
+            },
+            SetValue() {
+
+                let that = this;
+
+                if (that.Model.RedisDataType !== 1) {
+                    that.alert.Error("设置数据目前仅支持【string】");
+                    return;
+                }
+                if (that.Model.TimeOut == undefined || that.Model.TimeOut <= 0) {
+                    that.alert.Error("请输入过期时间");
+                    return;
+                }
+                console.log(that.Model);
+                const url = `/GodMode/SetValue`;
+                ajaxCall.Post(that, url,
+                    that.Model
+                    , function (that, data) {
+                        that.alert.Success("保存成功");
+                    });
+            },
+        },
+        mounted: function () {
+
+        }
+
+    });
+
+</script>
+
+

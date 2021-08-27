@@ -145,7 +145,7 @@ namespace StarrySky.DZH.TopORM
 
         private string GetUpdateSql()
         {
-            if (updateColumn.IsNullOrEmptyCollection())
+            if (updateColumn.CollectionIsNullOrEmpty())
             {
                 return "";
             }

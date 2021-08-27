@@ -36,7 +36,7 @@ namespace StarrySky.DZH.TopORM
             StringBuilder sbInsertSql = new StringBuilder();
             Type type = typeof(T);
             var classConstruction = GenericMappingProvider.GetClassConstruction(obj);
-            if (classConstruction.Properities.IsNullOrEmptyCollection()) {
+            if (classConstruction.Properities.CollectionIsNullOrEmpty()) {
                 return "";
             }
             List<string> columnName = new List<string>();
@@ -69,7 +69,7 @@ namespace StarrySky.DZH.TopORM
             StringBuilder sbSql = new StringBuilder();
             Type type = typeof(T);
             var classConstruction = GenericMappingProvider.GetClassConstruction(obj);
-            if (classConstruction.Properities.IsNullOrEmptyCollection())
+            if (classConstruction.Properities.CollectionIsNullOrEmpty())
             {
                 return "";
             }
@@ -92,7 +92,7 @@ namespace StarrySky.DZH.TopORM
                 }
             }
             var tableInfo = (TableInfoAttribute)classConstruction.AttributeList.FirstOrDefault(x => x.TypeId.ToString().Contains(nameof(TableInfoAttribute)));
-            if (keyProp == null||(long)keyProp.PropInfo.GetValue(obj)==0L || setcolumn.IsNullOrEmptyCollection())
+            if (keyProp == null||(long)keyProp.PropInfo.GetValue(obj)==0L || setcolumn.CollectionIsNullOrEmpty())
             {
                 return "";
             }
@@ -104,7 +104,7 @@ namespace StarrySky.DZH.TopORM
         {
             var type = typeof(T);
             var classConstruction = GenericMappingProvider.GetClassConstruction(obj);
-            if (classConstruction.Properities.IsNullOrEmptyCollection())
+            if (classConstruction.Properities.CollectionIsNullOrEmpty())
             {
                 return "";
             }

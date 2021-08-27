@@ -14,64 +14,77 @@ namespace StarrySky.DZH.Util.Encrypt
     /// <summary>
     /// 超全加密
     /// </summary>
-    public class EncryptHelper
+    public class EncryptTools
     {
-        #region MD5(Message Digest Algorithm Version.5)
 
         /// <summary>MD5加密</summary>
         /// <param name="beforeStr">需要加密的字符串</param>
         /// <remarks>此种加密之后的字符串是三十二位的(字母加数据)字符串</remarks>
         /// <remarks>Example: password是admin 加密变成后21232f297a57a5a743894a0e4a801fc3</remarks>
         /// <returns></returns>
-        public static string Md5Encrypt(string beforeStr)
+        public static string Md5Encrypt(string str)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] t = md5.ComputeHash(Encoding.UTF8.GetBytes(beforeStr));
-            StringBuilder sb = new StringBuilder(32);
-            foreach (byte item in t)
+            using (var md5 = MD5.Create())
             {
-                sb.Append(item.ToString("x").PadLeft(2, '0'));
+                var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
+                // 方法2 ：BitConverter.ToString(hash).Replace("-", "");
+                var result = hash.Aggregate(new StringBuilder(), (sb, t) => sb.Append(t.ToString("x2")), sb => sb.ToString());
+                return result;
             }
-            return sb.ToString();
-        }
-
-        public static string GetMD5Code(string str)
-        {
-            string temp = "";
-            System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();//实例化一个md5对像
-             // 加密后是一个字节类型的数组，这里要注意编码UTF8/Unicode等的选择　
-            byte[] s = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(str));
-            //法1：转换成加密的字串
-            temp = BitConverter.ToString(s).Replace("-", "");
-            /*
-            //法2：通过循环将字节类型的数组转换为字符串，此字符串是常规字符格式化所得，存在丟失（若某字節為00，轉換後則只有一個0）
-            for (int i = 0; i < s.Length; i++)
-            {
-                // 将得到的字符串使用十六进制类型格式。格式后的字符是小写的字母，如果使用大写（X）则格式后的字符是大写字符 
-                temp = temp + s[i].ToString("X");
-            }
-             * */
-            return temp;
         }
 
         /// <summary>
-        /// 返回32位的加密字串
+        /// SHA1安全哈希算法
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string GetMD5Code32Bit(string str)
+        /// <param name="security">security</param>
+        /// <returns>returns</returns>
+        public static string SHA1Encrypt(string security)
         {
-            MD5CryptoServiceProvider md5Hasher = new MD5CryptoServiceProvider();
-            byte[] hashedDataBytes;
-            hashedDataBytes = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(str));
-            StringBuilder tmp = new StringBuilder();
-            foreach (byte i in hashedDataBytes)
+            // 建立SHA1对象
+            SHA1 sha = new SHA1CryptoServiceProvider();
+            var buffer = Encoding.UTF8.GetBytes(security);
+            var data = sha.ComputeHash(buffer);
+
+            StringBuilder sub = new StringBuilder();
+            foreach (var t in data)
             {
-                tmp.Append(i.ToString("x2"));
+                sub.Append(t.ToString("X2")); //即转化为大写的16进制， x2 小写16进制 2表示输出两位，不足的2位的前面补0,如 0x0A 如果没有2,就只会输出0xA
             }
-            return tmp.ToString();
+
+            // 将运算结果转换成string 和上面的foreach一样效果
+            // string result = BitConverter.ToString(data).Replace("-", "");
+            return sub.ToString();
         }
-        #endregion MD5
+
+        /// <summary>
+        /// base64
+        /// </summary>
+        /// <param name="plainText">加密字串</param>
+        /// <returns>加密结果</returns>
+        public static string Base64Encode(string plainText)
+        {
+            System.Console.WriteLine(plainText);
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        /// <summary>
+        /// 图片流
+        /// </summary>
+        /// <param name="bytes">formfile</param>
+        /// <returns>结果</returns>
+        public static string ImgToBase64String(byte[] bytes)
+        {
+            try
+            {
+                return System.Convert.ToBase64String(bytes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return string.Empty;
+            }
+        }
 
         #region BASE64(8bit字节代码编码)
 
@@ -379,14 +392,6 @@ namespace StarrySky.DZH.Util.Encrypt
 
         #endregion DES(Data Encryption Algorithm)
 
-        #region TripleDES
-
-        //待补充
-
-        #endregion TripleDES
-
-        #region SHA(Security Hash Algorithm)
-
         /// <summary>SHA512安全哈希算法</summary>
         /// <param name="security"></param>
         /// <returns></returns>
@@ -443,90 +448,6 @@ namespace StarrySky.DZH.Util.Encrypt
             return sha224;
         }
 
-        /// <summary>SHA1安全哈希算法</summary>
-        /// <param name="security"></param>
-        /// <returns></returns>
-        public static string SHAEncrypt(string security)
-        {
-            var code = new UnicodeEncoding();
-            var message = code.GetBytes(security);
-            var arithmetic = new SHA1Managed();
-            var value = arithmetic.ComputeHash(message);
-            return value.Aggregate("", (current, o) => current + ((int)o + "O"));
-        }
 
-        #endregion SHA(Security Hash Algorithm)
-
-        #region HMACSHA(Hash-based Message Authentication Code)
-
-        /// <summary>HMACSHA1</summary>
-        /// <param name="security"></param>
-        /// <returns></returns>
-        public static string HMacSHA512Encrypt(string security, string key)
-        {
-            var hmacsha512 = new HMACSHA512();
-            hmacsha512.Key = System.Text.Encoding.ASCII.GetBytes(key);
-            byte[] myWord = System.Text.Encoding.Default.GetBytes(security);
-            byte[] result = hmacsha512.ComputeHash(myWord);
-            var myResult = new StringBuilder();
-            foreach (byte myChar in result)
-            {
-                myResult.AppendFormat("{0:x2}", myChar);
-            }
-            return myResult.ToString();
-        }
-
-        /// <summary>HMACSHA384</summary>
-        /// <param name="security"></param>
-        /// <returns></returns>
-        public static string HMacSHA384Encrypt(string security, string key)
-        {
-            var hmacsha384 = new HMACSHA384();
-            hmacsha384.Key = System.Text.Encoding.ASCII.GetBytes(key);
-            byte[] myWord = System.Text.Encoding.Default.GetBytes(security);
-            byte[] result = hmacsha384.ComputeHash(myWord);
-            var myResult = new StringBuilder();
-            foreach (byte myChar in result)
-            {
-                myResult.AppendFormat("{0:x2}", myChar);
-            }
-            return myResult.ToString();
-        }
-
-        /// <summary>HMACSHA256</summary>
-        /// <param name="security"></param>
-        /// <returns></returns>
-        public static string HMacSHA256Encrypt(string security, string key)
-        {
-            var hmacsha256 = new HMACSHA256();
-            hmacsha256.Key = System.Text.Encoding.ASCII.GetBytes(key);
-            byte[] myWord = System.Text.Encoding.Default.GetBytes(security);
-            byte[] result = hmacsha256.ComputeHash(myWord);
-            var myResult = new StringBuilder();
-            foreach (byte myChar in result)
-            {
-                myResult.AppendFormat("{0:x2}", myChar);
-            }
-            return myResult.ToString();
-        }
-
-        /// <summary>HMACSHA1</summary>
-        /// <param name="security"></param>
-        /// <returns></returns>
-        public static string HMacSHAEncrypt(string security, string key)
-        {
-            var hmacsha1 = new HMACSHA1();
-            hmacsha1.Key = System.Text.Encoding.ASCII.GetBytes(key);
-            byte[] myWord = System.Text.Encoding.Default.GetBytes(security);
-            byte[] result = hmacsha1.ComputeHash(myWord);
-            var myResult = new StringBuilder();
-            foreach (byte myChar in result)
-            {
-                myResult.AppendFormat("{0:x2}", myChar);
-            }
-            return myResult.ToString();
-        }
-
-        #endregion HMACSHA(Hash-based Message Authentication Code)
     }
 }
